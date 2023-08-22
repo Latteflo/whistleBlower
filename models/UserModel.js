@@ -38,45 +38,6 @@ const getUserById = async (userId) => {
   };
   
 
-// Function to update a user
-const updateUser = async (userId, username, email, password) => {
-  const query =
-    "UPDATE user_auth SET username = $1, email = $2, password = $3 WHERE id = (SELECT auth_id FROM user_role WHERE id = $4) RETURNING *"
-  const values = [username, email, password, userId]
-
-  try {
-    const result = await pool.query(query, values)
-    return result.rows[0]
-  } catch (err) {
-    throw err
-  }
-}
-
-// Function to delete a user
-const deleteUser = async (userId) => {
-  const query =
-    "DELETE FROM user_auth WHERE id = (SELECT auth_id FROM user_role WHERE id = $1) RETURNING *"
-
-  try {
-    const result = await pool.query(query, [userId])
-    return result.rows[0]
-  } catch (err) {
-    throw err
-  }
-}
-
-// Function to change a user's role
-const changeUserRole = async (userId, role) => {
-  const query = "UPDATE user_role SET role = $1 WHERE id = $2 RETURNING *"
-  const values = [role, userId]
-
-  try {
-    const result = await pool.query(query, values)
-    return result.rows[0]
-  } catch (err) {
-    throw err
-  }
-}
 
 // Function to retrieve a user by username (including the password, for authentication)
 const getUserByUsername = async (username) => {
@@ -106,8 +67,5 @@ const getAllUsers = async () => {
 
 exports.createUser = createUser
 exports.getUserById = getUserById
-exports.updateUser = updateUser
-exports.deleteUser = deleteUser
-exports.changeUserRole = changeUserRole
 exports.getUserByUsername = getUserByUsername
 exports.getAllUsers = getAllUsers
