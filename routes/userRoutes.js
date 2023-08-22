@@ -1,19 +1,20 @@
 const express = require('express');
 const router = express.Router();
-const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
-const { createUser } = require('../models/UserModel');
+const UserController = require('../controllers/UserController'); 
+const { authMiddleware } = require('../middleware/authMiddleware');
+const { authMiddlewareWithRole } = require('../middleware/authMiddleware');
 
-router.post('/register', async (req, res) => {
-  // Registration logic
-  const hashedPassword = await bcrypt.hash(req.body.password, 10);
-  const user = await createUser(req.body.username, hashedPassword);
-  const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET);
-  res.json({ token });
-});
+// Registration route
+router.post('/register', UserController.register);
 
-router.post('/login', async (req, res) => {
-  // Login logic
-});
+// Login route
+router.post('/login', UserController.login);
 
+// Admin registration route (accessible only to admins)
+router.post('/register-admin', authMiddlewareWithRole('admin'), UserController.registerAdmin);
+
+// Profile route (protected)
+router.get('/profile', authMiddleware, UserController.profile);
+
+// Export the router
 module.exports = router;

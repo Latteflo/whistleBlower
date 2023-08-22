@@ -5,7 +5,10 @@
     "cors": "^2.8.5",
     "dotenv": "^16.3.1",
     "express": "^4.18.2",
+    "express-validator": "^7.0.1",
     "jsonwebtoken": "^9.0.1",
+    "passport": "^0.6.0",
+    "passport-jwt": "^4.0.1",
     "pg": "^8.11.3"
   },
   "name": "whistleblower",
@@ -17,5 +20,5 @@
   "keywords": [],
   "author": "Flo",
   "license": "ISC",
-  "description": "whistleblower backend"
+  "description": "whistleBlower backend"
 }
