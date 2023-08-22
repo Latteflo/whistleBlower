@@ -25,18 +25,14 @@ const createUser = async (username, email, password, role = "client") => {
 }
 
 // Function to retrieve a user by ID
-const getUserById = async (userId) => {
-    console.log('Fetching user with ID:', userId); // Log the user ID
-  
+const getUserById = async (userId) => {  
     const query =
     "SELECT ua.*, ur.role FROM user_auth AS ua JOIN user_role AS ur ON ua.id = ur.auth_id WHERE ur.auth_id = $1";
   
     try {
       const result = await pool.query(query, [userId]);
-      console.log('User fetched:', result.rows[0]); // Log the user fetched
       return result.rows[0];
     } catch (err) {
-      console.error('Error fetching user:', err); // Log any errors
       throw err;
     }
   };
