@@ -2,6 +2,7 @@ const express = require("express")
 const router = express.Router()
 const ReportController = require("../controllers/ReportController")
 const { authMiddleware } = require("../middleware/authMiddleware")
+const { authMiddlewareWithRole } = require('../middleware/authMiddleware');
 
 /**
  * @swagger

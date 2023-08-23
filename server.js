@@ -4,6 +4,7 @@ const PORT = process.env.PORT || 3000;
 require("./config/db");
 require('./config/jwt');
 const userRoutes = require("./routes/userRoutes");
+const reportRoutes = require("./routes/reportRoutes");
 const replyRoutes = require("./routes/replyRoutes");
 const priorityRoutes = require("./routes/priorityRoutes");
 const categoryRoutes = require("./routes/categoryRoutes");
@@ -18,6 +19,7 @@ app.use('/documentation', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 // Middleware
 app.use(express.json());
 app.use("/users", userRoutes);
+app.use("/reports", reportRoutes);
 app.use("/replies", replyRoutes);
 app.use("/priorities", priorityRoutes);
 app.use("/categories", categoryRoutes);

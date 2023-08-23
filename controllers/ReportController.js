@@ -3,9 +3,11 @@ const {
     getReportById,
     updateReportById,
     deleteReportById,
+    getAllReports,
+    getReportsByPriorityColor,
   } = require('../models/ReportModel');
   const { pool } = require('../config/db');
-
+  
   exports.createReport = async (req, res) => {
     try {
       const report = await createReport(req.body);
@@ -51,20 +53,30 @@ const {
     }
   };
 
-// Function to retrieve reports by priority color
-const getReportsByPriorityColor = async (color) => {
-  const query = `
-    SELECT reports.*
-    FROM reports
-    JOIN priority ON reports.priority_id = priority.id
-    WHERE priority.color_code = $1
-  `;
-  try {
-    const result = await pool.query(query, [color]);
-    return result.rows;
-  } catch (err) {
-    throw err;
-  }
-};
+  exports.getAllReports = async (req, res) => {
+    try {
+      const reports = await getReports(); 
+      res.status(200).json({ data: reports });
+    } catch (error) {
+      res.status(400).json({ message: 'Error retrieving reports', error });
+    }
+  };
+  
 
-exports.getReportsByPriorityColor = getReportsByPriorityColor;
+
+
+// Function to retrieve reports by priority color
+exports.getReportsByPriorityColor = async (color) => {
+    const query = `
+      SELECT reports.*
+      FROM reports
+      JOIN priority ON reports.priority_id = priority.id
+      WHERE priority.color_code = $1
+    `;
+    try {
+      const result = await pool.query(query, [color]);
+      return result.rows;
+    } catch (err) {
+      throw err;
+    }
+  };
