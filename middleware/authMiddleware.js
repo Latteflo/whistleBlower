@@ -10,8 +10,8 @@ const authMiddleware = passport.authenticate('jwt', {
 const authMiddlewareWithRole = (requiredRole) => {
     return (req, res, next) => {
       passport.authenticate('jwt', { session: false }, (err, user, info) => {
-        console.log('Authenticated user:', user); // Log the authenticated user
-        console.log('Required role:', requiredRole); // Log the required role  
+        //console.log('Authenticated user:', user); // Log the authenticated user
+        //console.log('Required role:', requiredRole); // Log the required role  
 
         if (err || !user || user.role !== requiredRole) {
           return res.status(403).json({ message: 'Access denied' });
