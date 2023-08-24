@@ -1,7 +1,7 @@
-const { pool } = require("../config/db")
+import { pool } from "../config/db.mjs";
 
 // Function to create a category
-const createCategory = async (name) => {
+export const createCategory = async (name) => {
   const query = "INSERT INTO categories (name) VALUES ($1) RETURNING *"
   const values = [name]
 
@@ -14,7 +14,7 @@ const createCategory = async (name) => {
 }
 
 // Function to retrieve all categories
-const getAllCategories = async () => {
+export const getAllCategories = async () => {
   const query = "SELECT * FROM categories"
   try {
     const result = await pool.query(query)
@@ -24,5 +24,15 @@ const getAllCategories = async () => {
   }
 }
 
-exports.createCategory = createCategory
-exports.getAllCategories = getAllCategories
+// Function to retrieve a category by ID
+export const getReportsByCategoryId = async (categoryId) => {
+  const query = "SELECT * FROM categories WHERE id = $1"
+  const values = [categoryId]
+
+  try {
+    const result = await pool.query(query, values)
+    return result.rows[0]
+  } catch (err) {
+    throw err
+  }
+}

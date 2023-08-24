@@ -1,7 +1,11 @@
-const express = require('express');
+import express from 'express';
+import {
+  getAllPriorities as getAllPriorities,
+  getQueriesByColor as getQueriesByColor,
+} from '../controllers/PriorityController.mjs';
+import { authMiddlewareWithRole } from '../middleware/authMiddleware.mjs';
+
 const router = express.Router();
-const PriorityController = require('../controllers/PriorityController');
-const { authMiddlewareWithRole } = require('../middleware/authMiddleware');
 
 /**
  * @swagger
@@ -15,7 +19,7 @@ const { authMiddlewareWithRole } = require('../middleware/authMiddleware');
  *       200:
  *         description: A list of priorities
  */
-router.get('/', authMiddlewareWithRole('admin'), PriorityController.getAllPriorities);
+router.get('/', authMiddlewareWithRole('admin'), getAllPriorities);
 
 /**
  * @swagger
@@ -36,6 +40,6 @@ router.get('/', authMiddlewareWithRole('admin'), PriorityController.getAllPriori
  *       200:
  *         description: A list of queries with the specified priority color
  */
-router.get('/queries/:color', authMiddlewareWithRole('admin'), PriorityController.getQueriesByColor);
+router.get('/queries/:color', authMiddlewareWithRole('admin'), getQueriesByColor);
 
-module.exports = router;
+export default router;

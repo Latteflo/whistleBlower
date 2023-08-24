@@ -1,13 +1,13 @@
-const passport = require('passport');
+import passport from 'passport'
 
 // This middleware ensures that the request has a valid JWT
-const authMiddleware = passport.authenticate('jwt', { 
+export const authMiddleware = passport.authenticate('jwt', { 
   session: false, 
   failureRedirect: '/login', // Redirect to login page on failure
 });
 
 // This middleware ensures that the request has a valid JWT and the user has the required role
-const authMiddlewareWithRole = (requiredRole) => {
+export const authMiddlewareWithRole = (requiredRole) => {
     return (req, res, next) => {
       passport.authenticate('jwt', { session: false }, (err, user, info) => {
         //console.log('Authenticated user:', user); // Log the authenticated user
@@ -20,10 +20,5 @@ const authMiddlewareWithRole = (requiredRole) => {
         next();
       })(req, res, next);
     };
-  };
-  
-  module.exports = {
-    authMiddleware,
-    authMiddlewareWithRole,
   };
   

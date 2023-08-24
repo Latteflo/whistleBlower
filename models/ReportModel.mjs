@@ -1,7 +1,7 @@
-const { pool } = require("../config/db")
+import { pool } from "../config/db.mjs"
 
 // Function to create a report
-const createReport = async (
+export const createReport = async (
   userId,
   categoryId,
   priorityId,
@@ -33,7 +33,7 @@ const createReport = async (
 }
 
 // Function to retrieve a report by ID
-const getReportById = async (reportId) => {
+export const getReportById = async (reportId) => {
   const query = "SELECT * FROM reports WHERE id = $1"
   try {
     const result = await pool.query(query, [reportId])
@@ -44,7 +44,7 @@ const getReportById = async (reportId) => {
 }
 
 // Function to update a report
-const updateReport = async (reportId, title, description, status) => {
+export const updateReport = async (reportId, title, description, status) => {
   const query =
     "UPDATE reports SET title = $1, description = $2, status = $3, updated_at = NOW() WHERE id = $4 RETURNING *"
   const values = [title, description, status, reportId]
@@ -58,7 +58,7 @@ const updateReport = async (reportId, title, description, status) => {
 }
 
 // Function to delete a report
-const deleteReport = async (reportId) => {
+export const deleteReport = async (reportId) => {
   const query = "DELETE FROM reports WHERE id = $1 RETURNING *"
 
   try {
@@ -69,7 +69,14 @@ const deleteReport = async (reportId) => {
   }
 }
 
-exports.createReport = createReport
-exports.getReportById = getReportById
-exports.updateReport = updateReport
-exports.deleteReport = deleteReport
+// Function to retrieve all reports by color
+export const getReportsByPriorityColor = async (color) => {
+  const query =
+    "SELECT r.*, c.name AS category, p.name AS priority FROM reports AS r JOIN categories AS c ON r.category_id = c.id JOIN priorities AS p ON r.priority_id = p.id WHERE p.color = $1"
+  try {
+    const result = await pool.query(query, [color])
+    return result.rows
+  } catch (err) {
+    throw err
+  }
+}

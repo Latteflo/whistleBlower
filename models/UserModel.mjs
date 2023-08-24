@@ -1,7 +1,7 @@
-const { pool } = require("../config/db")
+import { pool } from "../config/db.mjs";
 
 // Function to create a user
-const createUser = async (username, email, password, role = "client") => {
+export const createUser = async (username, email, password, role = "client") => {
   await pool.query("BEGIN")
 
   try {
@@ -25,22 +25,20 @@ const createUser = async (username, email, password, role = "client") => {
 }
 
 // Function to retrieve a user by ID
-const getUserById = async (userId) => {  
-    const query =
-    "SELECT ua.*, ur.role FROM user_auth AS ua JOIN user_role AS ur ON ua.id = ur.auth_id WHERE ur.auth_id = $1";
-  
-    try {
-      const result = await pool.query(query, [userId]);
-      return result.rows[0];
-    } catch (err) {
-      throw err;
-    }
-  };
-  
+export const getUserById = async (userId) => {
+  const query =
+    "SELECT ua.*, ur.role FROM user_auth AS ua JOIN user_role AS ur ON ua.id = ur.auth_id WHERE ur.auth_id = $1"
 
+  try {
+    const result = await pool.query(query, [userId])
+    return result.rows[0]
+  } catch (err) {
+    throw err
+  }
+}
 
 // Function to retrieve a user by username (including the password, for authentication)
-const getUserByUsername = async (username) => {
+export const getUserByUsername = async (username) => {
   const query =
     "SELECT ua.*, ur.role FROM user_auth AS ua JOIN user_role AS ur ON ua.id = ur.auth_id WHERE ua.username = $1"
   try {
@@ -52,7 +50,7 @@ const getUserByUsername = async (username) => {
 }
 
 // Function to retrieve all users (joining user_auth and user_role)
-const getAllUsers = async () => {
+export const getAllUsers = async () => {
   const query =
     "SELECT ua.*, ur.role FROM user_auth AS ua JOIN user_role AS ur ON ua.id = ur.auth_id"
   try {
@@ -62,10 +60,3 @@ const getAllUsers = async () => {
     throw err
   }
 }
-
-
-
-exports.createUser = createUser
-exports.getUserById = getUserById
-exports.getUserByUsername = getUserByUsername
-exports.getAllUsers = getAllUsers

@@ -1,5 +1,8 @@
-const { Pool } = require('pg');
-require('dotenv').config();
+import pkg from 'pg';
+const { Pool } = pkg;
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 const pool = new Pool({
   host: process.env.DB_HOST,
@@ -14,8 +17,7 @@ pool.connect()
     console.log('database databasing');
   })
   .catch((err) => {
-    console.error('database not datanasing:', err);
+    console.error('database not databasing:', err);
   });
 
-
-exports.pool = pool;
+export { pool };

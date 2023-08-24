@@ -1,30 +1,29 @@
-const {
-  initializePriorities,
-  getAllPriorities,
-} = require("../models/PriorityModel")
-const { pool } = require("../config/db")
-const { getReportsByPriorityColor } = require("../models/ReportModel")
+import {
+  initializePriorities as initializePrioritiesModel,
+  getAllPriorities as getAllPrioritiesModel,
+} from "../models/PriorityModel.mjs"
+import { pool } from "../config/db.mjs"
+import { getReportsByPriorityColor as getReportsByPriorityColorModel } from "../models/ReportModel.mjs"
 
-
-exports.initializePriorities = async (req, res) => {
+export const initializePriorities = async (req, res) => {
   try {
-    await initializePriorities()
+    await initializePrioritiesModel()
     res.status(200).json({ message: "Priorities initialized successfully" })
   } catch (error) {
     res.status(500).json({ message: "Error initializing priorities", error })
   }
 }
 
-exports.getAllPriorities = async (req, res) => {
+export const getAllPriorities = async (req, res) => {
   try {
-    const priorities = await getAllPriorities()
+    const priorities = await getAllPrioritiesModel()
     res.status(200).json({ data: priorities })
   } catch (error) {
     res.status(500).json({ message: "Error retrieving priorities", error })
   }
 }
 
-exports.getReportsByPriorityColor = async (req, res) => {
+export const getReportsByPriorityColor = async (req, res) => {
   try {
     const colorCode = req.params.colorCode || null
     let query = `
@@ -44,11 +43,10 @@ exports.getReportsByPriorityColor = async (req, res) => {
   }
 }
 
-
-exports.getQueriesByColor = async (req, res) => {
+export const getQueriesByColor = async (req, res) => {
   try {
     const color = req.params.color
-    const queries = await getReportsByPriorityColor(color)
+    const queries = await getReportsByPriorityColorModel(color)
     res.status(200).json({ data: queries })
   } catch (error) {
     res

@@ -1,8 +1,15 @@
-const express = require("express")
-const router = express.Router()
-const ReportController = require("../controllers/ReportController")
-const { authMiddleware } = require("../middleware/authMiddleware")
-const { authMiddlewareWithRole } = require('../middleware/authMiddleware');
+import express from 'express';
+import {
+  createReport,
+  getReportById,
+  updateReport,
+  deleteReport,
+  getReportsByPriorityColor,
+  getAllReports,
+} from '../controllers/ReportController.mjs';
+import { authMiddleware, authMiddlewareWithRole } from '../middleware/authMiddleware.mjs';
+
+const router = express.Router();
 
 /**
  * @swagger
@@ -21,7 +28,7 @@ const { authMiddlewareWithRole } = require('../middleware/authMiddleware');
  *       200:
  *         description: Report created successfully
  */
-router.post("/create", authMiddleware, ReportController.createReport)
+router.post("/create", authMiddleware, createReport);
 
 /**
  * @swagger
@@ -41,7 +48,7 @@ router.post("/create", authMiddleware, ReportController.createReport)
  *               items:
  *                 $ref: '#/components/schemas/Report'
  */
-router.get("/", authMiddleware, ReportController.getAllReports)
+router.get("/", authMiddleware, getAllReports);
 
 /**
  * @swagger
@@ -66,7 +73,7 @@ router.get("/", authMiddleware, ReportController.getAllReports)
  *             schema:
  *               $ref: '#/components/schemas/Report'
  */
-router.get("/:id", authMiddleware, ReportController.getReportById)
+router.get("/:id", authMiddleware, getReportById);
 
 /**
  * @swagger
@@ -92,7 +99,7 @@ router.get("/:id", authMiddleware, ReportController.getReportById)
  *       200:
  *         description: Report updated successfully
  */
-router.put("/:id", authMiddleware, ReportController.updateReport)
+router.put("/:id", authMiddleware, updateReport);
 
 /**
  * @swagger
@@ -113,7 +120,7 @@ router.put("/:id", authMiddleware, ReportController.updateReport)
  *       200:
  *         description: Report deleted successfully
  */
-router.delete("/:id", authMiddleware, ReportController.deleteReport)
+router.delete("/:id", authMiddleware, deleteReport);
 
 /**
  * @swagger
@@ -137,7 +144,7 @@ router.delete("/:id", authMiddleware, ReportController.deleteReport)
 router.get(
   "/priority-color/:color",
   authMiddlewareWithRole("admin"),
-  ReportController.getReportsByPriorityColor
-)
+  getReportsByPriorityColor
+);
 
-module.exports = router
+export default router;

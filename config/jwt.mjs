@@ -1,8 +1,7 @@
-const passport = require('passport');
-const JwtStrategy = require('passport-jwt').Strategy;
-const ExtractJwt = require('passport-jwt').ExtractJwt;
-const { getUserById } = require('../models/UserModel');
-const dotenv = require('dotenv');
+import passport from 'passport';
+import { Strategy as JwtStrategy, ExtractJwt } from 'passport-jwt';
+import { getUserById } from '../models/UserModel.mjs';
+import dotenv from 'dotenv';
 
 dotenv.config();
 

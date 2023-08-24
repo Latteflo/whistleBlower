@@ -1,7 +1,12 @@
-const express = require('express');
-const router = express.Router();
-const CategoryController = require('../controllers/CategoryController');
-const { authMiddlewareWithRole } = require('../middleware/authMiddleware');
+import express from "express"
+import {
+  createCategoryController as createCategory,
+  getAllCategoriesController as getAllCategories,
+  getReportsByCategoryController as getReportsByCategory,
+} from "../controllers/CategoryController.mjs"
+import { authMiddlewareWithRole } from "../middleware/authMiddleware.mjs"
+
+const router = express.Router()
 
 /**
  * @swagger
@@ -23,7 +28,11 @@ const { authMiddlewareWithRole } = require('../middleware/authMiddleware');
  *       201:
  *         description: Category created successfully
  */
-router.post('/', authMiddlewareWithRole('admin'), CategoryController.createCategory);
+router.post(
+  "/",
+  authMiddlewareWithRole("admin"),
+  createCategory // Corrected
+)
 
 /**
  * @swagger
@@ -35,7 +44,7 @@ router.post('/', authMiddlewareWithRole('admin'), CategoryController.createCateg
  *       200:
  *         description: A list of categories
  */
-router.get('/', CategoryController.getAllCategories);
+router.get("/", getAllCategories) // Corrected
 
 /**
  * @swagger
@@ -56,6 +65,10 @@ router.get('/', CategoryController.getAllCategories);
  *       200:
  *         description: Reports retrieved successfully
  */
-router.get('/:id/reports', authMiddlewareWithRole('admin'), CategoryController.getReportsByCategory);
+router.get(
+  "/:id/reports",
+  authMiddlewareWithRole("admin"),
+  getReportsByCategory
+)
 
-module.exports = router;
+export default router

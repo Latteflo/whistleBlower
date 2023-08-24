@@ -1,7 +1,13 @@
-const express = require('express');
+import express from 'express';
+import {
+  register,
+  login,
+  registerAdmin,
+  profile
+} from '../controllers/UserController.mjs';
+import { authMiddleware, authMiddlewareWithRole } from '../middleware/authMiddleware.mjs';
+
 const router = express.Router();
-const UserController = require('../controllers/UserController');
-const { authMiddleware, authMiddlewareWithRole } = require('../middleware/authMiddleware');
 
 /**
  * @swagger
@@ -18,7 +24,7 @@ const { authMiddleware, authMiddlewareWithRole } = require('../middleware/authMi
  *       200:
  *         description: User registered successfully
  */
-router.post('/register', UserController.register);
+router.post('/register', register);
 
 /**
  * @swagger
@@ -35,7 +41,7 @@ router.post('/register', UserController.register);
  *       200:
  *         description: User logged in successfully
  */
-router.post('/login', UserController.login);
+router.post('/login', login);
 
 /**
  * @swagger
@@ -54,7 +60,7 @@ router.post('/login', UserController.login);
  *       200:
  *         description: Admin registered successfully
  */
-router.post('/register-admin', authMiddlewareWithRole('admin'), UserController.registerAdmin);
+router.post('/register-admin', authMiddlewareWithRole('admin'), registerAdmin);
 
 /**
  * @swagger
@@ -68,7 +74,6 @@ router.post('/register-admin', authMiddlewareWithRole('admin'), UserController.r
  *       200:
  *         description: User profile retrieved successfully
  */
-router.get('/profile', authMiddleware, UserController.profile);
+router.get('/profile', authMiddleware, profile);
 
-// Export the router
-module.exports = router;    
+export default router;

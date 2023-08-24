@@ -1,7 +1,7 @@
-const { pool } = require("../config/db")
+import { pool } from "../config/db.mjs";
 
 // Function to initialize priorities
-const initializePriorities = async () => {
+export const initializePriorities = async () => {
   const priorities = [
     { name: "High", colorCode: "#FF0000" },
     { name: "Medium", colorCode: "#FFFF00" },
@@ -21,7 +21,7 @@ const initializePriorities = async () => {
 }
 
 // Function to retrieve all priorities
-const getAllPriorities = async () => {
+export const getAllPriorities = async () => {
   const query = "SELECT * FROM priority"
   try {
     const result = await pool.query(query)
@@ -30,6 +30,3 @@ const getAllPriorities = async () => {
     throw err
   }
 }
-
-exports.initializePriorities = initializePriorities
-exports.getAllPriorities = getAllPriorities

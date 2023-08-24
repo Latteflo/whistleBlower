@@ -1,7 +1,11 @@
-const express = require('express');
-const router = express.Router();
-const AuditLogController = require('../controllers/AuditLogController');
-const { authMiddlewareWithRole } = require('../middleware/authMiddleware');
+import express from "express"
+import {
+  createAuditLogController as createAuditLog,
+  getAuditLogsByReportController as getAuditLogsByReport,
+} from "../controllers/AuditLogController.mjs"
+import { authMiddlewareWithRole } from "../middleware/authMiddleware.mjs"
+
+const router = express.Router()
 
 /**
  * @swagger
@@ -27,7 +31,7 @@ const { authMiddlewareWithRole } = require('../middleware/authMiddleware');
  *       201:
  *         description: Audit log created successfully
  */
-router.post('/', authMiddlewareWithRole('admin'), AuditLogController.createAuditLog);
+router.post("/", authMiddlewareWithRole("admin"), createAuditLog)
 
 /**
  * @swagger
@@ -48,6 +52,6 @@ router.post('/', authMiddlewareWithRole('admin'), AuditLogController.createAudit
  *       200:
  *         description: Audit logs retrieved successfully
  */
-router.get('/:id/logs', authMiddlewareWithRole('admin'), AuditLogController.getAuditLogsByReport);
+router.get("/:id/logs", authMiddlewareWithRole("admin"), getAuditLogsByReport)
 
-module.exports = router;
+export default router

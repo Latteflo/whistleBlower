@@ -1,17 +1,17 @@
-const express = require("express");
+import express from "express";
+import "./config/db.mjs";
+import "./config/jwt.mjs";
+import userRoutes from "./routes/userRoutes.mjs";
+import reportRoutes from "./routes/reportRoutes.mjs";
+import replyRoutes from "./routes/replyRoutes.mjs";
+import priorityRoutes from "./routes/priorityRoutes.mjs";
+import categoryRoutes from "./routes/categoryRoutes.mjs";
+import { authMiddlewareWithRole } from "./middleware/authMiddleware.mjs";
+import swaggerUi from 'swagger-ui-express';
+import swaggerDocs from './config/swagger.mjs'; 
+
 const app = express();
 const PORT = process.env.PORT || 3000;
-require("./config/db");
-require('./config/jwt');
-const userRoutes = require("./routes/userRoutes");
-const reportRoutes = require("./routes/reportRoutes");
-const replyRoutes = require("./routes/replyRoutes");
-const priorityRoutes = require("./routes/priorityRoutes");
-const categoryRoutes = require("./routes/categoryRoutes");
-
-const { authMiddlewareWithRole } = require("./middleware/authMiddleware");
-const swaggerUi = require('swagger-ui-express');
-const swaggerDocs = require('./config/swagger'); 
 
 // Use Swagger
 app.use('/documentation', swaggerUi.serve, swaggerUi.setup(swaggerDocs));

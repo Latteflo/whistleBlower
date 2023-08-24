@@ -1,10 +1,10 @@
-const {
+import {
   createCategory,
   getAllCategories,
   getReportsByCategoryId,
-} = require('../models/CategoryModel');
+} from '../models/CategoryModel.mjs';
 
-exports.createCategory = async (req, res) => {
+export const createCategoryController = async (req, res) => {
   try {
     const category = await createCategory(req.body.name);
     res.status(201).json({ message: 'Category created successfully', data: category });
@@ -13,7 +13,7 @@ exports.createCategory = async (req, res) => {
   }
 };
 
-exports.getAllCategories = async (req, res) => {
+export const getAllCategoriesController = async (req, res) => {
   try {
     const categories = await getAllCategories();
     res.status(200).json({ data: categories });
@@ -22,7 +22,7 @@ exports.getAllCategories = async (req, res) => {
   }
 };
 
-exports.getReportsByCategory = async (req, res) => {
+export const getReportsByCategoryController = async (req, res) => {
   try {
     const reports = await getReportsByCategoryId(req.params.id);
     if (reports.length === 0) {

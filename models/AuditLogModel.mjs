@@ -1,7 +1,7 @@
-const { pool } = require("../config/db")
+import { pool } from "../config/db.mjs";
 
 // Function to create an audit log
-const createAuditLog = async (userId, reportId, action) => {
+export const createAuditLog = async (userId, reportId, action) => {
   const query =
     "INSERT INTO audit_logs (user_id, report_id, action, timestamp) VALUES ($1, $2, $3, NOW()) RETURNING *"
   const values = [userId, reportId, action]
@@ -15,7 +15,7 @@ const createAuditLog = async (userId, reportId, action) => {
 }
 
 // Function to retrieve audit logs by report ID
-const getAuditLogsByReportId = async (reportId) => {
+export const getAuditLogsByReportId = async (reportId) => {
   const query = "SELECT * FROM audit_logs WHERE report_id = $1"
   try {
     const result = await pool.query(query, [reportId])
@@ -24,6 +24,3 @@ const getAuditLogsByReportId = async (reportId) => {
     throw err
   }
 }
-
-exports.createAuditLog = createAuditLog
-exports.getAuditLogsByReportId = getAuditLogsByReportId

@@ -1,7 +1,13 @@
-const express = require('express');
+import express from 'express';
+import {
+  createReplyController as createReply,
+  getReplyByIdController as getReplyById,
+  updateReplyController as updateReply,
+  deleteReplyController as deleteReply,
+} from '../controllers/ReplyController.mjs';
+import { authMiddleware } from '../middleware/authMiddleware.mjs';
+
 const router = express.Router();
-const ReplyController = require('../controllers/ReplyController');
-const { authMiddleware } = require('../middleware/authMiddleware');
 
 /**
  * @swagger
@@ -20,7 +26,7 @@ const { authMiddleware } = require('../middleware/authMiddleware');
  *       201:
  *         description: Reply created successfully
  */
-router.post('/', authMiddleware, ReplyController.createReply);
+router.post('/', authMiddleware, createReply);
 
 /**
  * @swagger
@@ -41,8 +47,7 @@ router.post('/', authMiddleware, ReplyController.createReply);
  *       200:
  *         description: Replies retrieved successfully
  */
-router.get('/:reportId', authMiddleware, ReplyController.getReplyById);
-
+router.get('/:reportId', authMiddleware, getReplyById);
 
 /**
  * @swagger
@@ -68,7 +73,7 @@ router.get('/:reportId', authMiddleware, ReplyController.getReplyById);
  *       200:
  *         description: Reply updated successfully
  */
-router.put('/:id', authMiddleware, ReplyController.updateReply);
+router.put('/:id', authMiddleware, updateReply);
 
 /**
  * @swagger
@@ -89,7 +94,6 @@ router.put('/:id', authMiddleware, ReplyController.updateReply);
  *       200:
  *         description: Reply deleted successfully
  */
-router.delete('/:id', authMiddleware, ReplyController.deleteReply);
+router.delete('/:id', authMiddleware, deleteReply);
 
-
-module.exports = router;
+export default router;
