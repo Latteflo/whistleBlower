@@ -1,0 +1,11 @@
+{
+    "functions": {
+      "api/server.mjs": {
+        "runtime": "nodejs"
+      }
+    },
+    "routes": [
+      { "src": "/api/.*", "dest": "/api/server.mjs" }
+    ]
+  }
+  
