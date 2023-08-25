@@ -6,7 +6,7 @@ import {
   deleteReport as deleteReportByIdModel,
 } from "../models/ReportModel.mjs"
 import { pool } from "../config/db.mjs"
-
+import { updateReportStatus } from "../models/ReportModel.mjs";
 // Function to create a report
 export const createReport = async (req, res) => {
   try {

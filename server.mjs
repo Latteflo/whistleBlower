@@ -35,7 +35,7 @@ app.get("/admin", authMiddlewareWithRole('admin'), (req, res) => {
 });
 
 // A route that only a client can access
-app.get("/client", authMiddlewareWithRole('client'), (req, res) => {
+app.get("/users", authMiddlewareWithRole('client'), (req, res) => {
   res.send("Hello client!");
 });
 

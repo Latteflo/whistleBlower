@@ -106,7 +106,8 @@ export const getReportsByUserId = async (userId) => {
   }
 };
 
-export const updateReportStatusController = async (req, res) => {
+// Function to update a report status
+export const updateReportStatus = async (req, res) => {
   try {
     // Extract report ID and new status from request
     const { id } = req.params;

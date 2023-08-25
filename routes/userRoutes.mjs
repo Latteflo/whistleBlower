@@ -1,13 +1,18 @@
-import express from 'express';
+import express from "express"
 import {
   register,
   login,
   registerAdmin,
-  profile
-} from '../controllers/UserController.mjs';
-import { authMiddleware, authMiddlewareWithRole } from '../middleware/authMiddleware.mjs';
+  profile,
+} from "../controllers/UserController.mjs"
+import {
+  authMiddleware,
+  authMiddlewareWithRole,
+} from "../middleware/authMiddleware.mjs"
+import { getClientDashboard } from "../controllers/ClientController.mjs"
+import { getAdminDashboard } from "../controllers/AdminController.mjs"
 
-const router = express.Router();
+const router = express.Router()
 
 /**
  * @swagger
@@ -24,7 +29,7 @@ const router = express.Router();
  *       200:
  *         description: User registered successfully
  */
-router.post("/register", register);
+router.post("/register", register)
 
 /**
  * @swagger
@@ -41,7 +46,7 @@ router.post("/register", register);
  *       200:
  *         description: User logged in successfully
  */
-router.post("/login", login);
+router.post("/login", login)
 
 /**
  * @swagger
@@ -60,7 +65,7 @@ router.post("/login", login);
  *       200:
  *         description: Admin registered successfully
  */
-router.post("/register-admin", authMiddlewareWithRole('admin'), registerAdmin);
+router.post("/register-admin", authMiddlewareWithRole("admin"), registerAdmin)
 
 /**
  * @swagger
@@ -74,6 +79,38 @@ router.post("/register-admin", authMiddlewareWithRole('admin'), registerAdmin);
  *       200:
  *         description: User profile retrieved successfully
  */
-router.get("/profile", authMiddleware, profile);
+router.get("/profile", authMiddleware, profile)
 
-export default router;
+/**
+ * @swagger
+ * /client/dashboard:
+ *   get:
+ *     summary: Get client dashboard
+ *     tags: [Dashboard]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Client dashboard retrieved successfully
+ */
+router.get("/client/dashboard", authMiddleware, getClientDashboard)
+
+/**
+ * @swagger
+ * /dashboard:
+ *   get:
+ *     summary: Get admin dashboard
+ *     tags: [Dashboard]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Admin dashboard retrieved successfully
+ */
+router.get(
+  "/admin/dashboard",
+  authMiddlewareWithRole("admin"),
+  getAdminDashboard
+)
+
+export default router
