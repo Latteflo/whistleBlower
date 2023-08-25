@@ -26,7 +26,7 @@ const router = express.Router();
  *       201:
  *         description: Reply created successfully
  */
-router.post('/reply/', authMiddleware, createReply);
+router.post("/reply/", authMiddleware, createReply);
 
 /**
  * @swagger
@@ -47,7 +47,7 @@ router.post('/reply/', authMiddleware, createReply);
  *       200:
  *         description: Replies retrieved successfully
  */
-router.get('/reply/:reportId', authMiddleware, getReplyById);
+router.get("/reply/:reportId", authMiddleware, getReplyById);
 
 /**
  * @swagger
@@ -73,7 +73,7 @@ router.get('/reply/:reportId', authMiddleware, getReplyById);
  *       200:
  *         description: Reply updated successfully
  */
-router.put('/reply/:id', authMiddleware, updateReply);
+router.put( "/reply/:id", authMiddleware, updateReply);
 
 /**
  * @swagger
@@ -94,6 +94,6 @@ router.put('/reply/:id', authMiddleware, updateReply);
  *       200:
  *         description: Reply deleted successfully
  */
-router.delete('/reply/:id', authMiddleware, deleteReply);
+router.delete("/reply/:id", authMiddleware, deleteReply);
 
 export default router;

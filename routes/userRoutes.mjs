@@ -24,7 +24,7 @@ const router = express.Router();
  *       200:
  *         description: User registered successfully
  */
-router.post('/register', register);
+router.post("/register", register);
 
 /**
  * @swagger
@@ -41,7 +41,7 @@ router.post('/register', register);
  *       200:
  *         description: User logged in successfully
  */
-router.post('/login', login);
+router.post("/login", login);
 
 /**
  * @swagger
@@ -60,7 +60,7 @@ router.post('/login', login);
  *       200:
  *         description: Admin registered successfully
  */
-router.post('/register-admin', authMiddlewareWithRole('admin'), registerAdmin);
+router.post("/register-admin", authMiddlewareWithRole('admin'), registerAdmin);
 
 /**
  * @swagger
@@ -74,6 +74,6 @@ router.post('/register-admin', authMiddlewareWithRole('admin'), registerAdmin);
  *       200:
  *         description: User profile retrieved successfully
  */
-router.get('/profile', authMiddleware, profile);
+router.get("/profile", authMiddleware, profile);
 
 export default router;

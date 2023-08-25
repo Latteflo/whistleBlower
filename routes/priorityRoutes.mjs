@@ -19,7 +19,7 @@ const router = express.Router();
  *       200:
  *         description: A list of priorities
  */
-router.get('/', authMiddlewareWithRole('admin'), getAllPriorities);
+router.get("/", authMiddlewareWithRole("admin"), getAllPriorities);
 
 /**
  * @swagger
@@ -40,6 +40,6 @@ router.get('/', authMiddlewareWithRole('admin'), getAllPriorities);
  *       200:
  *         description: A list of queries with the specified priority color
  */
-router.get('/queries/:color', authMiddlewareWithRole('admin'), getQueriesByColor);
+router.get("/queries/:color", authMiddlewareWithRole("admin"), getQueriesByColor);
 
 export default router;
