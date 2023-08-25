@@ -3,9 +3,9 @@ import { pool } from "../config/db.mjs";
 // Function to initialize priorities
 export const initializePriorities = async () => {
   const priorities = [
-    { name: "High", colorCode: "#FF0000" },
-    { name: "Medium", colorCode: "#FFFF00" },
-    { name: "Low", colorCode: "#00FF00" },
+    { name: "High", colorCode: "red" },
+    { name: "Medium", colorCode: "orange" },
+    { name: "Low", colorCode: "yellow" },
   ]
 
   try {
