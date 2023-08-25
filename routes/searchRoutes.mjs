@@ -4,8 +4,7 @@ import {
   searchCategoriesController,
 } from "../controllers/SearchController.mjs"
 import {
-  authMiddleware,
-  authMiddlewareWithRole,
+  authMiddleware
 } from "../middleware/authMiddleware.mjs"
 
 const router = express.Router()

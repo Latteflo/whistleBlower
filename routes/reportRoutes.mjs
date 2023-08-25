@@ -33,7 +33,7 @@ const router = express.Router()
  *       200:
  *         description: Report created successfully
  */
-router.post("/report/create", authMiddleware, createReport)
+router.post("/create", authMiddleware, createReport)
 
 /**
  * @swagger
@@ -53,7 +53,7 @@ router.post("/report/create", authMiddleware, createReport)
  *               items:
  *                 $ref: '#/components/schemas/Report'
  */
-router.get("/report/", authMiddlewareWithRole("admin"), getAllReports)
+router.get("/", authMiddlewareWithRole("admin"), getAllReports)
 
 /**
  * @swagger
@@ -78,7 +78,7 @@ router.get("/report/", authMiddlewareWithRole("admin"), getAllReports)
  *             schema:
  *               $ref: '#/components/schemas/Report'
  */
-router.get("/report/:id", authMiddleware, getReportById)
+router.get("/:id", authMiddleware, getReportById)
 
 /**
  * @swagger
@@ -104,7 +104,7 @@ router.get("/report/:id", authMiddleware, getReportById)
  *       200:
  *         description: Report updated successfully
  */
-router.put("/report/:id", authMiddleware, updateReport)
+router.put("/:id", authMiddleware, updateReport)
 
 /**
  * @swagger
@@ -125,7 +125,7 @@ router.put("/report/:id", authMiddleware, updateReport)
  *       200:
  *         description: Report deleted successfully
  */
-router.delete("/report/:id", authMiddleware, deleteReport)
+router.delete("/:id", authMiddleware, deleteReport)
 
 /**
  * @swagger
@@ -147,7 +147,7 @@ router.delete("/report/:id", authMiddleware, deleteReport)
  *         description: Reports retrieved successfully
  */
 router.get(
-  "/report/priority-color/:color",
+  "/priority-color/:color",
   authMiddlewareWithRole("admin"),
   getReportsByPriorityColor
 )
@@ -185,6 +185,6 @@ router.get(
  *       500:
  *         description: An error occurred while updating the report status
  */
-router.put("/report/:id/status", authMiddleware ,updateReportStatusController)
+router.put("/:id/status", authMiddleware ,updateReportStatusController)
 
 export default router
