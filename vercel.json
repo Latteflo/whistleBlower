@@ -1,6 +1,15 @@
 {
+    "version": 2,
+    "builds": [
+      {
+        "src": "server.mjs"
+      }
+    ],
     "rewrites": [
-      { "source": "/(.*)", "destination": "/server.mjs" }
+      {
+        "source": "/(.*)",
+        "destination": "/server.mjs"
+      }
     ]
   }
   
