@@ -1,9 +1,4 @@
 {
-    "functions": {
-      "server.mjs": {
-        "runtime": "nodejs"
-      }
-    },
     "rewrites": [
       { "source": "/(.*)", "destination": "/server.mjs" }
     ]

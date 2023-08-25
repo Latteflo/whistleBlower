@@ -18,10 +18,16 @@
   "type": "module",
   "main": "server.mjs",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.mjs",
+    "dev": "nodemon server.mjs",
+    "build": "echo 'No build step'"
   },
   "keywords": [],
   "author": "Flo",
   "license": "ISC",
-  "description": "whistleBlower backend"
+  "description": "whistleBlower backend",
+  "devDependencies": {
+    "nodemon": "^3.0.1"
+  }
 }
