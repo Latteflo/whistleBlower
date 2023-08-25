@@ -11,20 +11,20 @@
 | DELETE | `/categories/:id`                             | Delete category by ID                     | Delete category button      |
 | GET    | `/priorities/`                                | Get all priorities                        | List priorities             |
 | GET    | `/priorities/queries/:color`                  | Get priorities by color                   | Filter by color             |
-| POST   | `/replies/reply`                              | Create a new reply                        | Reply to report form        |
-| GET    | `/replies/reply/:reportId`                    | Get replies by report ID                  | List replies for a report   |
-| PUT    | `/replies/reply/:id`                          | Update reply by ID                        | Edit reply form             |
-| DELETE | `/replies/reply/:id`                          | Delete reply by ID                        | Delete reply button         |
+| POST   | `/replies/`                                   | Create a new reply                        | Reply to report form        |
+| GET    | `/replies/:reportId`                          | Get replies by report ID                  | List replies for a report   |
+| PUT    | `/replies/:id`                                | Update reply by ID                        | Edit reply form             |
+| DELETE | `/replies/:id`                                | Delete reply by ID                        | Delete reply button         |
 | GET    | `/reports/client/dashboard`                   | Get client dashboard                      | Client dashboard view       |
 | GET    | `/reports/admin/dashboard`                    | Get admin dashboard                       | Admin dashboard view        |
-| POST   | `/reports/report/create`                      | Create a new report                       | Create report form          |
-| GET    | `/reports/report`                             | Get all reports                           | List all reports            |
-| GET    | `/reports/report/:id`                         | Get report by ID                          | Display report details      |
-| PUT    | `/reports/report/:id`                         | Update report by ID                       | Edit report form            |
-| DELETE | `/reports/report/:id`                         | Delete report by ID                       | Delete report button        |
-| PUT    | `/reports/report/:id/status`                  | Update report status by ID                | Change report status        |
-| GET    | `/search/search/reports`                      | Search reports                            | Search reports view         |
-| GET    | `/search/search/categories`                   | Search categories                         | Search categories view      |
+| POST   | `/reports/create`                             | Create a new report                       | Create report form          |
+| GET    | `/reports`                                    | Get all reports                           | List all reports            |
+| GET    | `/reports/:id`                                | Get report by ID                          | Display report details      |
+| PUT    | `/reports/:id`                                | Update report by ID                       | Edit report form            |
+| DELETE | `/reports/:id`                                | Delete report by ID                       | Delete report button        |
+| PUT    | `/reports/:id/status`                         | Update report status by ID                | Change report status        |
+| GET    | `/search/reports`                             | Search reports                            | Search reports view         |
+| GET    | `/search/categories`                          | Search categories                         | Search categories view      |
 | POST   | `/users/register`                             | Register a new user                       | Registration form           |
 | POST   | `/users/login`                                | Login a user                              | Login form                  |
 | POST   | `/users/register-admin`                       | Register a new admin user                 | Admin registration form     |
