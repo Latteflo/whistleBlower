@@ -1,4 +1,4 @@
-import express from 'express';
+import express from "express"
 import {
   createReport,
   getReportById,
@@ -6,10 +6,43 @@ import {
   deleteReport,
   getReportsByPriorityColor,
   getAllReports,
-} from '../controllers/ReportController.mjs';
-import { authMiddleware, authMiddlewareWithRole } from '../middleware/authMiddleware.mjs';
+  updateReportStatusController,
+} from "../controllers/ReportController.mjs"
+import {
+  authMiddleware,
+  authMiddlewareWithRole,
+} from "../middleware/authMiddleware.mjs"
+import { getClientDashboard } from '../controllers/ClientController.mjs';
+import { getAdminDashboard } from "../controllers/AdminController.mjs";
 
-const router = express.Router();
+const router = express.Router()
+/**
+ * @swagger
+ * /client/dashboard:
+ *   get:
+ *     summary: Get client dashboard
+ *     tags: [Dashboard]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Client dashboard retrieved successfully
+ */
+router.get("/client/dashboard", authMiddleware, getClientDashboard)
+
+/**
+ * @swagger
+ * /dashboard:
+ *   get:
+ *     summary: Get admin dashboard
+ *     tags: [Dashboard]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Admin dashboard retrieved successfully
+ */
+router.get("/admin/dashboard", authMiddlewareWithRole("admin"), getAdminDashboard)
 
 /**
  * @swagger
@@ -28,7 +61,7 @@ const router = express.Router();
  *       200:
  *         description: Report created successfully
  */
-router.post("/create", authMiddleware, createReport);
+router.post("/report/create", authMiddleware, createReport)
 
 /**
  * @swagger
@@ -48,7 +81,7 @@ router.post("/create", authMiddleware, createReport);
  *               items:
  *                 $ref: '#/components/schemas/Report'
  */
-router.get("/", authMiddleware, getAllReports);
+router.get("/report/", authMiddlewareWithRole("admin"), getAllReports)
 
 /**
  * @swagger
@@ -73,7 +106,7 @@ router.get("/", authMiddleware, getAllReports);
  *             schema:
  *               $ref: '#/components/schemas/Report'
  */
-router.get("/:id", authMiddleware, getReportById);
+router.get("/report/:id", authMiddleware, getReportById)
 
 /**
  * @swagger
@@ -99,7 +132,7 @@ router.get("/:id", authMiddleware, getReportById);
  *       200:
  *         description: Report updated successfully
  */
-router.put("/:id", authMiddleware, updateReport);
+router.put("/report/:id", authMiddleware, updateReport)
 
 /**
  * @swagger
@@ -120,7 +153,7 @@ router.put("/:id", authMiddleware, updateReport);
  *       200:
  *         description: Report deleted successfully
  */
-router.delete("/:id", authMiddleware, deleteReport);
+router.delete("/report/:id", authMiddleware, deleteReport)
 
 /**
  * @swagger
@@ -142,9 +175,44 @@ router.delete("/:id", authMiddleware, deleteReport);
  *         description: Reports retrieved successfully
  */
 router.get(
-  "/priority-color/:color",
+  "/report/priority-color/:color",
   authMiddlewareWithRole("admin"),
   getReportsByPriorityColor
-);
+)
 
-export default router;
+/**
+ * @swagger
+ * /reports/{id}/status:
+ *   put:
+ *     summary: Update report status
+ *     tags:
+ *       - Reports
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: Report ID
+ *       - in: body
+ *         name: status
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: New status
+ *     responses:
+ *       200:
+ *         description: Report status updated successfully
+ *         schema:
+ *           type: object
+ *           properties:
+ *             success:
+ *               type: boolean
+ *             message:
+ *               type: string
+ *       500:
+ *         description: An error occurred while updating the report status
+ */
+router.put("/report/:id/status", authMiddleware ,updateReportStatusController)
+
+export default router

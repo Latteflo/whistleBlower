@@ -8,17 +8,23 @@ export const authMiddleware = passport.authenticate('jwt', {
 
 // This middleware ensures that the request has a valid JWT and the user has the required role
 export const authMiddlewareWithRole = (requiredRole) => {
-    return (req, res, next) => {
-      passport.authenticate('jwt', { session: false }, (err, user, info) => {
-        //console.log('Authenticated user:', user); // Log the authenticated user
-        //console.log('Required role:', requiredRole); // Log the required role  
+  return (req, res, next) => {
+    passport.authenticate('jwt', { session: false }, (err, user, info) => {
+      if (err) {
+        console.error('Authentication error:', err); 
+        return res.status(500).json({ message: 'An error occurred during authentication' });
+      }
 
-        if (err || !user || user.role !== requiredRole) {
-          return res.status(403).json({ message: 'Access denied' });
-        }
-        req.user = user; 
-        next();
-      })(req, res, next);
-    };
+      if (!user) {
+        return res.status(401).json({ message: 'Authentication failed' });
+      }
+
+      if (typeof user.role !== 'string' || user.role !== requiredRole) {
+        return res.status(403).json({ message: 'Access denied' });
+      }
+
+      req.user = user;
+      next();
+    })(req, res, next);
   };
-  
+};

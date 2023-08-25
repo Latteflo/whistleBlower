@@ -32,6 +32,18 @@ export const createReport = async (
   }
 }
 
+// Function to retrieve all reports
+export const getAllReports = async () => {
+  const query = "SELECT * FROM reports";
+  try {
+    const result = await pool.query(query);
+    return result.rows;
+  } catch (err) {
+    throw err;
+  }
+};
+
+
 // Function to retrieve a report by ID
 export const getReportById = async (reportId) => {
   const query = "SELECT * FROM reports WHERE id = $1"
@@ -80,3 +92,34 @@ export const getReportsByPriorityColor = async (color) => {
     throw err
   }
 }
+// Function to retrieve reports by user ID
+export const getReportsByUserId = async (userId) => {
+  try {
+    // Query to fetch all reports for a specific user by user ID
+    const query = 'SELECT * FROM reports WHERE user_id = $1';
+    const values = [userId];
+    const result = await pool.query(query, values);
+    return result.rows;
+  } catch (error) {
+    console.error('Error fetching reports for user:', error);
+    throw error;
+  }
+};
+
+export const updateReportStatusController = async (req, res) => {
+  try {
+    // Extract report ID and new status from request
+    const { id } = req.params;
+    const { status } = req.body;
+
+    // Call the corresponding model function to update the report status in the database
+    const updatedReport = await updateReportStatus(id, status);
+
+    // Send a successful response with the updated report
+    res.json({ success: true, report: updatedReport });
+  } catch (error) {
+    // Handle any errors that occurred during the update
+    console.error('Error updating report status:', error);
+    res.status(500).json({ success: false, message: 'An error occurred while updating the report status' });
+  }
+};
