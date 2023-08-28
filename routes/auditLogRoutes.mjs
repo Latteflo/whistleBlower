@@ -1,7 +1,7 @@
 import express from "express"
 import {
   createAuditLogController as createAuditLog,
-  getAuditLogsByReportController as getAuditLogsByReport,
+  getAuditLogsByReport as getAuditLogsByReport
 } from "../controllers/AuditLogController.mjs"
 import { authMiddlewareWithRole } from "../middleware/authMiddleware.mjs"
 
