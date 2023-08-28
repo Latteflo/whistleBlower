@@ -1,4 +1,4 @@
-import { searchReports, searchCategories } from '../models/SearchModel'; 
+import { searchReports, searchCategories } from '../models/SearchModel.mjs'; 
 
 export const searchReportsController = async (req, res) => {
   try {
