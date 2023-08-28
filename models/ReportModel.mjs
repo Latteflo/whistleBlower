@@ -25,10 +25,11 @@ export const createReport = async (
   ]
 
   try {
-    const result = await pool.query(query, values)
-    return result.rows[0]
+    const result = await pool.query(query, values);
+    return result.rows[0];
   } catch (err) {
-    throw err
+    console.error("Error executing query", { query, values, err });
+    throw err;
   }
 }
 
