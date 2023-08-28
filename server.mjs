@@ -7,7 +7,7 @@ import replyRoutes from "./routes/replyRoutes.mjs";
 import searchRoutes from "./routes/searchRoutes.mjs";
 import priorityRoutes from "./routes/priorityRoutes.mjs";
 import categoryRoutes from "./routes/categoryRoutes.mjs";
-import auditRoutes from "./routes/auditRoutes.mjs";
+import auditRoutes from "./routes/auditLogRoutes.mjs";
 import { authMiddlewareWithRole } from "./middleware/authMiddleware.mjs";
 import swaggerUi from 'swagger-ui-express';
 import swaggerDocs from './config/swagger.mjs'; 
@@ -27,6 +27,7 @@ app.use("/search", searchRoutes);
 app.use("/priorities", priorityRoutes);
 app.use("/categories", categoryRoutes);
 app.use("/audits", auditRoutes);
+
 
 // Routes
 app.get("/", (req, res) => {
