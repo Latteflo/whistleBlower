@@ -1,7 +1,7 @@
 import {
   createCategory,
   getAllCategories,
-  getReportsByCategoryId,
+  getCategoryById
 } from '../models/CategoryModel.mjs';
 
 export const createCategoryController = async (req, res) => {
@@ -24,7 +24,7 @@ export const getAllCategoriesController = async (req, res) => {
 
 export const getReportsByCategoryIdController= async (req, res) => {
   try {
-    const reports = await getReportsByCategoryId(req.params.id);
+    const reports = await getCategoryById(req.params.id);
     if (reports.length === 0) {
       return res.status(404).json({ message: 'Reports not found for this category' });
     }
