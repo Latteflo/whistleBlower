@@ -12,6 +12,11 @@ export const createReport = async (
   involveOthers,
   status
 ) => {
+  // Validate data types
+  if (typeof userId !== 'number' || typeof categoryId !== 'number' || typeof priorityId !== 'number') {
+    throw new Error('Invalid data types for IDs');
+  }
+
   // SQL query for inserting a new report
   const query = `
     INSERT INTO reports(
@@ -27,7 +32,7 @@ export const createReport = async (
     )
     VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9)
     RETURNING *; 
-  `
+  `;
 
   // Values to insert into the report table
   const values = [
@@ -40,21 +45,23 @@ export const createReport = async (
     isAnonymous,
     involveOthers,
     status,
-  ]
+  ];
 
   try {
-    console.log("Executing query:", query) // Debug log
-    console.log("With values:", values) // Debug log
+    console.log('Executing query:', query); // Debug log
+    console.log('With values:', values); // Debug log
+    console.log('Data types:', values.map(value => typeof value)); // Debug log
+
     // Execute the SQL query
-    const result = await pool.query(query, values)
+    const result = await pool.query(query, values);
 
     // Return the inserted report
-    return result.rows[0]
+    return result.rows[0];
   } catch (err) {
-    console.error("Error executing query", { query, values, err })
-    throw err
+    console.error('Error executing query', { query, values, err });
+    throw err;
   }
-}
+};
 
 // Function to retrieve all reports
 export const getAllReports = async () => {
