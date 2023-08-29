@@ -3,9 +3,9 @@ import { pool } from "../config/db.mjs";
 // Function to initialize priorities
 export const initializePriorities = async () => {
   const priorities = [
-    { name: "High", colorCode: "red" },
-    { name: "Medium", colorCode: "orange" },
-    { name: "Low", colorCode: "yellow" },
+    { name: "High", colorCode: "#FF0000" },
+    { name: "Medium", colorCode: "#FFFF00 " },
+    { name: "Low", colorCode: "#00FF00" },
   ]
 
   try {
@@ -16,17 +16,21 @@ export const initializePriorities = async () => {
       await pool.query(query, values)
     }
   } catch (err) {
-    throw err
+    console.error('Error in fetching priorities:', err);
+    return [];
   }
+  
 }
 
 // Function to retrieve all priorities
 export const getAllPriorities = async () => {
-  const query = "SELECT * FROM priority"
+  const query = 'SELECT * FROM priority';
   try {
     const result = await pool.query(query)
     return result.rows
   } catch (err) {
-    throw err
+    console.error('Error in fetching priorities:', err);
+    return [];
   }
+  
 }

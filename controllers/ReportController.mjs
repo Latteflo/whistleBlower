@@ -7,17 +7,16 @@ import {
 } from "../models/ReportModel.mjs"
 import { pool } from "../config/db.mjs"
 import { updateReportStatus } from "../models/ReportModel.mjs";
-// Function to create a report
-export const createReport = async (req, res) => {
+
+
+export const createReport = async (req, res) => {  
   try {
-    const report = await createReportModel(req.body)
-    res
-      .status(201)
-      .json({ message: "Report created successfully", data: report })
+    const report = await createReportModel(req.body);  
+    res.status(201).json({ message: "Report created successfully", data: report });
   } catch (error) {
-    res.status(400).json({ message: "Error creating report", error })
+    res.status(400).json({ message: "Error creating report", error });
   }
-}
+};
 
 // Function to get a report by id
 export const getReportById = async (req, res) => {

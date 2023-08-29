@@ -10,8 +10,9 @@ export const createReply = async (reportId, userId, text) => {
     const result = await pool.query(query, values)
     return result.rows[0]
   } catch (err) {
-    throw err
-  }
+    console.error('Error in fetching replies:', err);
+    return [];
+  }  
 }
 
 // Function to retrieve replies by report ID
@@ -21,8 +22,10 @@ export const getRepliesByReportId = async (reportId) => {
     const result = await pool.query(query, [reportId])
     return result.rows
   } catch (err) {
-    throw err
+    console.error('Error in fetching replies:', err);
+    return [];
   }
+  
 }
 
 // Function to update a reply
@@ -34,8 +37,9 @@ export const updateReply = async (replyId, text) => {
     const result = await pool.query(query, values)
     return result.rows[0]
   } catch (err) {
-    throw err
-  }
+    console.error('Error in fetching replies:', err);
+    return [];
+  }  
 }
 
 // Function to delete a reply
@@ -46,6 +50,7 @@ export const deleteReply = async (replyId) => {
     const result = await pool.query(query, [replyId])
     return result.rows[0]
   } catch (err) {
-    throw err
-  }
+    console.error('Error in fetching replies:', err);
+    return [];
+  }  
 }

@@ -3,14 +3,12 @@
 
 | Method | URL                                           | Description                               | Frontend Interaction        |
 |--------|-----------------------------------------------|-------------------------------------------|-----------------------------|
-| GET    | `/auditlogs/:id/logs`                         | Retrieve audit logs by ID                 | Display audit logs          |
+| GET    | `/`                                           | Home page                                 | Home page                   |
 | GET    | `/categories/`                                | Get all categories                        | List categories             |
 | POST   | `/categories/`                                | Create a new category                     | Create category form        |
 | GET    | `/categories/:id`                             | Get category by ID                        | Display category details    |
 | PUT    | `/categories/:id`                             | Update category by ID                     | Edit category form          |
 | DELETE | `/categories/:id`                             | Delete category by ID                     | Delete category button      |
-| GET    | `/priorities/`                                | Get all priorities                        | List priorities             |
-| GET    | `/priorities/queries/:color`                  | Get priorities by color                   | Filter by color             |
 | POST   | `/replies/`                                   | Create a new reply                        | Reply to report form        |
 | GET    | `/replies/:reportId`                          | Get replies by report ID                  | List replies for a report   |
 | PUT    | `/replies/:id`                                | Update reply by ID                        | Edit reply form             |

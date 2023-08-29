@@ -22,7 +22,7 @@ export const getAllCategoriesController = async (req, res) => {
   }
 };
 
-export const getReportsByCategoryController= async (req, res) => {
+export const getReportsByCategoryIdController= async (req, res) => {
   try {
     const reports = await getReportsByCategoryId(req.params.id);
     if (reports.length === 0) {

@@ -65,7 +65,7 @@ router.post("/login", login)
  *       200:
  *         description: Admin registered successfully
  */
-router.post("/register-admin", authMiddlewareWithRole("admin"), registerAdmin)
+router.post("/register-admin", registerAdmin)
 
 /**
  * @swagger

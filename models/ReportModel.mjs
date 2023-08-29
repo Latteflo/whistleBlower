@@ -12,8 +12,24 @@ export const createReport = async (
   involveOthers,
   status
 ) => {
-  const query =
-    "INSERT INTO reports (user_id, category_id, priority_id, title, description, media , is_anonymous, involve_others, status, submitted_at) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, NOW()) RETURNING *"
+  // SQL query for inserting a new report
+  const query = `
+    INSERT INTO reports(
+      user_id, 
+      category_id, 
+      priority_id, 
+      title, 
+      description, 
+      media, 
+      is_anonymous, 
+      involve_others, 
+      status
+    )
+    VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9)
+    RETURNING *; 
+  `
+
+  // Values to insert into the report table
   const values = [
     userId,
     categoryId,
@@ -27,7 +43,12 @@ export const createReport = async (
   ]
 
   try {
+    console.log("Executing query:", query) // Debug log
+    console.log("With values:", values) // Debug log
+    // Execute the SQL query
     const result = await pool.query(query, values)
+
+    // Return the inserted report
     return result.rows[0]
   } catch (err) {
     console.error("Error executing query", { query, values, err })
@@ -42,7 +63,8 @@ export const getAllReports = async () => {
     const result = await pool.query(query)
     return result.rows
   } catch (err) {
-    throw err
+    console.error("Error in fetching reports:", err)
+    return []
   }
 }
 
@@ -53,7 +75,8 @@ export const getReportById = async (reportId) => {
     const result = await pool.query(query, [reportId])
     return result.rows[0]
   } catch (err) {
-    throw err
+    console.error("Error in fetching reports:", err)
+    return []
   }
 }
 
@@ -67,7 +90,8 @@ export const updateReport = async (reportId, title, description, status) => {
     const result = await pool.query(query, values)
     return result.rows[0]
   } catch (err) {
-    throw err
+    console.error("Error in fetching reports:", err)
+    return []
   }
 }
 
@@ -79,7 +103,8 @@ export const deleteReport = async (reportId) => {
     const result = await pool.query(query, [reportId])
     return result.rows[0]
   } catch (err) {
-    throw err
+    console.error("Error in fetching reports:", err)
+    return []
   }
 }
 
@@ -91,7 +116,8 @@ export const getReportsByPriorityColor = async (color) => {
     const result = await pool.query(query, [color])
     return result.rows
   } catch (err) {
-    throw err
+    console.error("Error in fetching reports:", err)
+    return []
   }
 }
 // Function to retrieve reports by user ID
@@ -123,11 +149,9 @@ export const updateReportStatus = async (req, res) => {
   } catch (error) {
     // Handle any errors that occurred during the update
     console.error("Error updating report status:", error)
-    res
-      .status(500)
-      .json({
-        success: false,
-        message: "An error occurred while updating the report status",
-      })
+    res.status(500).json({
+      success: false,
+      message: "An error occurred while updating the report status",
+    })
   }
 }

@@ -21,6 +21,8 @@ export const getAuditLogsByReportId = async (reportId) => {
     const result = await pool.query(query, [reportId])
     return result.rows
   } catch (err) {
-    throw err
+    console.error('Error in creating audit log:', err);
+    return null;
   }
+  
 }

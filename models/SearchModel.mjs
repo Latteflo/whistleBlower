@@ -1,4 +1,4 @@
-import { pool } from '../config/db.mjs';
+import db from '../config/db.mjs';
 
 // Function to search reports based on a query
 export const searchReports = async (query) => {
@@ -13,7 +13,7 @@ export const searchReports = async (query) => {
     // Adding wildcards to the query for partial matching
     const values = [`%${query}%`];
 
-    const result = await pool.query(sql, values);
+    const result = await db.query(sql, values);
     return result.rows;
   } catch (error) {
     console.error(error);
@@ -33,7 +33,7 @@ export const searchCategories = async (query) => {
     // Adding wildcards to the query for partial matching
     const values = [`%${query}%`];
 
-    const result = await pool.query(sql, values);
+    const result = await db.query(sql, values);
     return result.rows;
   } catch (error) {
     console.error(error);

@@ -28,6 +28,14 @@ app.use("/priorities", priorityRoutes);
 app.use("/categories", categoryRoutes);
 app.use("/audits", auditRoutes);
 
+// Set cookie options for production
+res.cookie('token', 'your_token', {
+  httpOnly: true,
+  secure: true
+});
+
+
+
 
 // Routes
 app.get("/", (req, res) => {
