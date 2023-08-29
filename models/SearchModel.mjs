@@ -1,4 +1,4 @@
-import db from '../config/db.mjs';
+import { pool } from '../config/db.mjs';
 
 // Function to search reports based on a query
 export const searchReports = async (query) => {
