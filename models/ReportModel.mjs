@@ -1,10 +1,7 @@
 import { pool } from "../config/db.mjs"
 
 // Function to create a report
-export const createReport = async (reportData , userId) => {
-  const checkUser = await pool.query("SELECT * FROM user_role WHERE id = $1", [userId]);
-console.log("Check User:", checkUser.rows);
-  
+export const createReport = async (reportData , userId) => {  
   const {
       categoryId, 
       priorityId, 

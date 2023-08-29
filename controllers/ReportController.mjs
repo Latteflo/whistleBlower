@@ -11,13 +11,10 @@ import { updateReportStatus } from "../models/ReportModel.mjs";
 // Function to create a report
 export const createReport = async (req, res) => {
   try {
-    console.log("Received body:", req.body);
-    console.log("Received user ID:", req.user.id);
     const userId = req.user.id;
     const report = await createReportModel(req.body, userId);
     res.status(201).json({ message: "Report created successfully", data: report });
   } catch (error) {
-    console.log("Error:", error);
     res.status(400).json({ message: "Error creating report", error });
   }
 };
