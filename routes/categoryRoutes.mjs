@@ -2,7 +2,7 @@ import express from "express"
 import {
  createCategoryController as createCategory,
  getAllCategoriesController as getAllCategories,
- getReportsByCategoryController as getReportsByCategory,
+ getReportsByCategoryIdController as getReportsByCategory,
 } from "../controllers/CategoryController.mjs"
 import { authMiddlewareWithRole } from "../middleware/authMiddleware.mjs"
 
