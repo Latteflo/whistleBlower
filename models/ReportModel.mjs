@@ -1,24 +1,34 @@
 import { pool } from "../config/db.mjs"
 
 // Function to create a report
-export const createReport = async (
-  userId,
-  categoryId,
-  priorityId,
-  title,
-  description,
-  media,
-  isAnonymous,
-  involveOthers,
-  status
-) => {
-  // Validate data types
-  if (typeof userId !== 'number' || typeof categoryId !== 'number' || typeof priorityId !== 'number') {
-    throw new Error('Invalid data types for IDs');
-  }
-
-  // SQL query for inserting a new report
-  const query = `
+export const createReport = async (reportData , userId) => {
+  const checkUser = await pool.query("SELECT * FROM user_role WHERE id = $1", [userId]);
+console.log("Check User:", checkUser.rows);
+  
+  const {
+      categoryId, 
+      priorityId, 
+      title, 
+      description, 
+      media, 
+      isAnonymous, 
+      involveOthers, 
+      status 
+    } = reportData;
+  
+    const values = [
+      userId, 
+      categoryId, 
+      priorityId, 
+      title, 
+      description, 
+      media, 
+      isAnonymous, 
+      involveOthers, 
+      status
+    ];
+    
+    const query = `
     INSERT INTO reports(
       user_id, 
       category_id, 
@@ -31,37 +41,19 @@ export const createReport = async (
       status
     )
     VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9)
-    RETURNING *; 
+    RETURNING *;
   `;
-
-  // Values to insert into the report table
-  const values = [
-    userId,
-    categoryId,
-    priorityId,
-    title,
-    description,
-    media,
-    isAnonymous,
-    involveOthers,
-    status,
-  ];
+  console.log("Executing query with:", query, values);
 
   try {
-    console.log('Executing query:', query); // Debug log
-    console.log('With values:', values); // Debug log
-    console.log('Data types:', values.map(value => typeof value)); // Debug log
-
-    // Execute the SQL query
     const result = await pool.query(query, values);
-
-    // Return the inserted report
     return result.rows[0];
   } catch (err) {
-    console.error('Error executing query', { query, values, err });
+    console.error("Error executing query", { query, values, err });
     throw err;
   }
 };
+
 
 // Function to retrieve all reports
 export const getAllReports = async () => {
