@@ -5,7 +5,7 @@ import {
   updateReport as updateReportByIdModel,
   deleteReport as deleteReportByIdModel,
 } from "../models/ReportModel.mjs";
-import dbx from "../config/storageConfig.mjs";
+import { dbx } from "../config/storageConfig.mjs";
 
 // Function to create a report
 export const createReport = async (req, res) => {
