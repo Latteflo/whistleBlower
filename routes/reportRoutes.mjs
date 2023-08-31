@@ -12,6 +12,7 @@ import {
   authMiddleware,
   authMiddlewareWithRole,
 } from "../middleware/authMiddleware.mjs"
+import multer from "multer"
 import { upload } from "../config/storageConfig.mjs"
 
 const router = express.Router()
