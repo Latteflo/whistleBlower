@@ -151,3 +151,46 @@ export const updateReportStatus = async (req, res) => {
     })
   }
 }
+
+
+// Function to update media URL for a report
+export const updateReportMedia = async (reportId, newMediaURL) => {
+  const query = "UPDATE reports SET media = $1 WHERE id = $2 RETURNING *";
+  const values = [newMediaURL, reportId];
+
+  try {
+    const result = await pool.query(query, values);
+    return result.rows[0];
+  } catch (err) {
+    console.error('Error in updating media:', err);
+    return null;
+  }
+};
+
+// Function to retrieve reports by category ID
+export const getReportsByCategoryId = async (categoryId) => {
+  const query = "SELECT * FROM reports WHERE category_id = $1"
+  try {
+    const result = await pool.query(query, [categoryId])
+    return result.rows
+  } catch (err) {
+    console.error("Error in fetching reports:", err)
+    return []
+  }
+}
+
+// Function to retrieve reports by priority ID
+export const getReportsByPriorityId = async (priorityId) => {
+  const query = "SELECT * FROM reports WHERE priority_id = $1"
+  try {
+    const result = await pool.query(query, [priorityId])
+    return result.rows
+  } catch (err) {
+    console.error("Error in fetching reports:", err)
+    return []
+  }
+}
+
+
+
+

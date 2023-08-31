@@ -32,6 +32,16 @@ export const getReportById = async (req, res) => {
   }
 }
 
+// Function to get reports by user ID
+export const getReportsByUserId = async (req, res) => {
+  try {
+    const reports = await getReportsByUserIdModel(req.user.id)
+    res.status(200).json({ data: reports })
+  } catch (error) {
+    res.status(400).json({ message: "Error retrieving reports", error })
+  }
+}
+
 // Function to update a report
 export const updateReport = async (req, res) => {
   try {
@@ -120,3 +130,23 @@ export const getDropboxUploadUrl = async (req, res) => {
     res.status(500).json({ error: 'Unable to generate Dropbox URL' });
   }
 };
+
+
+// Endpoint to update media for a report
+export const updateReportMediaController = async (req, res) => {
+  try {
+    const { reportId, newMediaURL } = req.body;
+    const updatedReport = await updateReportMedia(reportId, newMediaURL);
+
+    if (updatedReport) {
+      res.status(200).json({ success: true, updatedReport });
+    } else {
+      res.status(400).json({ success: false, message: 'Failed to update media.' });
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ success: false, message: 'An error occurred while updating media.' });
+  }
+};
+
+
