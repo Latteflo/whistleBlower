@@ -10,7 +10,7 @@ const swaggerOptions = {
     },
     servers: [
       {
-        url: 'http://localhost:3000',
+        url: 'https://whistle-blower-server.vercel.app',
       },
     ],
   },

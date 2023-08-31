@@ -34,6 +34,15 @@ app.get("/", (req, res) => {
   res.send("Hello, world!!!");
 });
 
+// Apply express.json() middleware conditionally
+app.use((req, res, next) => {
+  if (req.path !== '/reports/create') {
+    return express.json()(req, res, next);
+  }
+  next();
+});
+
+
 // A route that only an admin can access
 app.get("/admin", authMiddlewareWithRole('admin'), (req, res) => {
   res.send("Hello admin!");
