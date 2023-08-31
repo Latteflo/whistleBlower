@@ -4,8 +4,18 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
-const upload = multer({ dest: 'uploads/' });
+const storage = multer.memoryStorage();
 
-const dbx = new Dropbox({ accessToken : process.env.DROPBOX_ACCESS_TOKEN });
+const upload = multer({
+  storage: storage,
+  fileFilter: (req, file, cb) => {
+    console.log('Multer file filter:', file);
+    cb(null, true);
+  }
+});
+
+const dbx = new Dropbox({ accessToken: process.env.DROPBOX_ACCESS_TOKEN });
+
+console.log('Dropbox Access Token:', process.env.DROPBOX_ACCESS_TOKEN);
 
 export { upload, dbx };

@@ -4,48 +4,51 @@ import {
   getAllReports as getAllReportsModel,
   updateReport as updateReportByIdModel,
   deleteReport as deleteReportByIdModel,
-} from "../models/ReportModel.mjs"
-import { pool } from "../config/db.mjs"
-import { updateReportStatus } from "../models/ReportModel.mjs"
-import { upload, dbx } from "../config/storageConfig.mjs"
-import fs from "fs"
-const uploadMedia = upload.single("media")
+} from "../models/ReportModel.mjs";
+import fs from "fs";
+import { upload, dbx } from "../config/storageConfig.mjs";
+const uploadMedia = upload.single("media");
 
 // Function to create a report
 export const createReport = [
   uploadMedia,
   async (req, res) => {
     try {
-      const userId = req.user.id
+      const userId = req.user.id;
 
       if (req.file) {
-        const { path, originalname } = req.file
-        const dropboxFileName = `/${Date.now()}-${originalname}`
-        const fileBuffer = fs.readFileSync(path)
+        const { path, originalname } = req.file;
+        const dropboxFileName = `/${Date.now()}-${originalname}`;
+        const fileBuffer = fs.readFileSync(path);
 
-        // Upload to Dropbox
-        const response = await dbx.filesUpload({
-          path: `/Whistleblower-Becode${dropboxFileName}`,
-          contents: fileBuffer,
-        })
+        try {
+          // Upload to Dropbox
+          const response = await dbx.filesUpload({
+            path: `/Whistleblower-Becode${dropboxFileName}`,
+            contents: fileBuffer,
+          });
 
-        // Set the Dropbox path in the request body
-        req.body.mediaUrl = response.path_lower
+          console.log("Dropbox Upload Response:", response);
+
+          // Set the Dropbox path in the request body
+          req.body.mediaUrl = response.path_lower;
+        } catch (error) {
+          console.error("Dropbox Upload Error:", error);
+          return res.status(500).send("Error while uploading to Dropbox");
+        }
 
         // Delete the local file
-        fs.unlinkSync(path)
+        fs.unlinkSync(path);
       }
 
-      const report = await createReportModel(req.body, userId)
-      res
-        .status(201)
-        .json({ message: "Report created successfully", data: report })
+      const report = await createReportModel(req.body, userId);
+      res.status(201).json({ message: "Report created successfully", data: report });
     } catch (error) {
-      console.error("Error while creating report: ", error)
-      res.status(500).send("Internal Server Error")
+      console.error("Error while creating report: ", error);
+      res.status(500).send("Internal Server Error");
     }
   },
-]
+];
 
 // Function to get a report by id
 export const getReportById = async (req, res) => {
