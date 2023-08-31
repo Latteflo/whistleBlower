@@ -4,6 +4,7 @@ import {
   getCategoryById
 } from '../models/CategoryModel.mjs';
 
+// Function to create a category
 export const createCategoryController = async (req, res) => {
   try {
     const category = await createCategory(req.body.name);
@@ -13,6 +14,7 @@ export const createCategoryController = async (req, res) => {
   }
 };
 
+// Function to get all categories
 export const getAllCategoriesController = async (req, res) => {
   try {
     const categories = await getAllCategories();
@@ -22,6 +24,7 @@ export const getAllCategoriesController = async (req, res) => {
   }
 };
 
+// Function to get reports by category ID
 export const getReportsByCategoryIdController= async (req, res) => {
   try {
     const reports = await getCategoryById(req.params.id);
