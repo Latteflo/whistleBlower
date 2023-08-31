@@ -159,7 +159,9 @@ export const updateReportMedia = async (reportId, newMediaURL) => {
   const values = [newMediaURL, reportId];
 
   try {
+    console.log(`Attempting to update media for reportId: ${reportId} with newMediaURL: ${newMediaURL}`);
     const result = await pool.query(query, values);
+    console.log("Update successful:", result.rows[0]);
     return result.rows[0];
   } catch (err) {
     console.error('Error in updating media:', err);
