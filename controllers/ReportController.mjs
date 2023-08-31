@@ -4,6 +4,12 @@ import {
   getAllReports as getAllReportsModel,
   updateReport as updateReportByIdModel,
   deleteReport as deleteReportByIdModel,
+  getReportsByUserId as getReportsByUserIdModel,
+  updateReportStatus,
+  getReportsByCategoryId,
+  getReportsByPriorityColor,
+  getReportsByPriorityId,
+  updateReportMedia,
 } from "../models/ReportModel.mjs";
 import { dbx } from "../config/storageConfig.mjs";
 
@@ -151,3 +157,56 @@ export const updateReportMediaController = async (req, res) => {
     res.status(500).json({ success: false, message: 'An error occurred while updating media.' });
   }
 };
+
+
+// Function to retrieve reports by category ID
+export const getReportsByCategoryIdController = async (req, res) => {
+  try {
+    const reports = await getReportsByCategoryId(req.params.id)
+    if (reports.length === 0) {
+      return res.status(404).json({ message: "Reports not found for this category" })
+    }
+    res.status(200).json({ data: reports })
+  } catch (error) {
+    res.status(500).json({ message: "Error retrieving reports by category", error })
+  }
+}
+
+// Function to retrieve reports by priority ID
+export const getReportsByPriorityIdController = async (req, res) => {
+  try {
+    const reports = await getReportsByPriorityId(req.params.id)
+    if (reports.length === 0) {
+      return res.status(404).json({ message: "Reports not found for this priority" })
+    }
+    res.status(200).json({ data: reports })
+  } catch (error) {
+    res.status(500).json({ message: "Error retrieving reports by priority", error })
+  }
+}
+
+// Function to retrieve reports by priority color
+export const getReportsByPriorityColorController = async (req, res) => {
+  try {
+    const reports = await getReportsByPriorityColor(req.params.color)
+    if (reports.length === 0) {
+      return res.status(404).json({ message: "Reports not found for this priority color" })
+    }
+    res.status(200).json({ data: reports })
+  } catch (error) {
+    res.status(500).json({ message: "Error retrieving reports by priority color", error })
+  }
+}
+
+// Function to retrieve reports by Priority ID
+export const getReportsByPriorityId = async (priorityId) => {
+  const query = "SELECT * FROM reports WHERE priority_id = $1"
+  try {
+    const result = await pool.query(query, [priorityId])
+    return result.rows
+  } catch (err) {
+    console.error("Error in fetching reports:", err)
+    return []
+  }
+}
+
