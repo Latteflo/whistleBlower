@@ -37,10 +37,8 @@ const router = express.Router()
 router.post("/create", authMiddleware, (req, res, next) => {
   upload.single('media')(req, res, function (err) {
     if (err instanceof multer.MulterError) {
-      // A Multer error occurred when uploading.
       return res.status(400).json({ error: err.message });
     } else if (err) {
-      // An unknown error occurred when uploading.
       return res.status(500).json({ error: err.message });
     }
     next();
