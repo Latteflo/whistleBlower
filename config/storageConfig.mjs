@@ -3,5 +3,4 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
-export default dbx = new Dropbox({ accessToken: process.env.DROPBOX_ACCESS_TOKEN });
-
+export const dbx = new Dropbox({ accessToken: process.env.DROPBOX_ACCESS_TOKEN });
