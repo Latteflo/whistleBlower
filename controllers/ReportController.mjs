@@ -5,7 +5,6 @@ import {
   updateReport as updateReportByIdModel,
   deleteReport as deleteReportByIdModel,
 } from "../models/ReportModel.mjs";
-import fs from "fs";
 import dbx from "../config/storageConfig.mjs";
 
 // Function to create a report
