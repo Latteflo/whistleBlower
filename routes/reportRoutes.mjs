@@ -12,7 +12,7 @@ import {
   authMiddleware,
   authMiddlewareWithRole,
 } from "../middleware/authMiddleware.mjs"
-
+import { upload } from "../config/storageConfig.mjs"
 
 const router = express.Router()
 
@@ -33,7 +33,7 @@ const router = express.Router()
  *       200:
  *         description: Report created successfully
  */
-router.post("/create", authMiddleware, createReport)
+router.post("/create", authMiddleware, upload.single("media"), createReport)
 
 /**
  * @swagger
@@ -185,6 +185,6 @@ router.get(
  *       500:
  *         description: An error occurred while updating the report status
  */
-router.put("/:id/status", authMiddleware ,updateReportStatusController)
+router.put("/:id/status", authMiddleware, updateReportStatusController)
 
 export default router

@@ -6,19 +6,44 @@ import {
   deleteReport as deleteReportByIdModel,
 } from "../models/ReportModel.mjs"
 import { pool } from "../config/db.mjs"
-import { updateReportStatus } from "../models/ReportModel.mjs";
+import { updateReportStatus } from "../models/ReportModel.mjs"
+import { upload, dbx } from "../config/storageConfig.mjs"
+import fs from "fs"
+const uploadMedia = upload.single("media")
 
 // Function to create a report
-export const createReport = async (req, res) => {
-  try {
-    const userId = req.user.id;
-    const report = await createReportModel(req.body, userId);
-    res.status(201).json({ message: "Report created successfully", data: report });
-  } catch (error) {
-    res.status(400).json({ message: "Error creating report", error });
-  }
-};
+export const createReport = [
+  uploadMedia,
+  async (req, res) => {
+    try {
+      const userId = req.user.id;
 
+      if (req.file) {
+        const { path, originalname } = req.file;
+        const dropboxFileName = `/${Date.now()}-${originalname}`;
+        const fileBuffer = fs.readFileSync(path);
+
+        // Upload to Dropbox
+        const response = await dbx.filesUpload({
+          path: `/Whistleblower-Becode${dropboxFileName}`,
+          contents: fileBuffer,
+        });
+
+        // Set the Dropbox path in the request body
+        req.body.mediaUrl = response.path_lower;
+
+        // Delete the local file
+        fs.unlinkSync(path);
+      }
+
+      const report = await createReportModel(req.body, userId);
+      res.status(201).json({ message: "Report created successfully", data: report });
+    } catch (error) {
+      console.error(error);
+      res.status(400).json({ message: "Error creating report", error });
+    }
+  },
+];
 
 // Function to get a report by id
 export const getReportById = async (req, res) => {
@@ -91,23 +116,22 @@ export const getReportsByPriorityColor = async (color) => {
 // Function to retrieve reports by status
 export const updateReportStatusController = async (req, res) => {
   try {
-    const reportId = req.params.id;
-    const status = req.body.status;
+    const reportId = req.params.id
+    const status = req.body.status
 
     // Updating the report's status
-    await updateReportStatus(reportId, status);
+    await updateReportStatus(reportId, status)
 
     // Returning a success response
     res.status(200).json({
       success: true,
-      message: 'Report status updated successfully.'
-    });
+      message: "Report status updated successfully.",
+    })
   } catch (error) {
-    console.error(error);
+    console.error(error)
     res.status(500).json({
       success: false,
-      message: 'An error occurred while updating the report status.'
-    });
+      message: "An error occurred while updating the report status.",
+    })
   }
-};
-
+}

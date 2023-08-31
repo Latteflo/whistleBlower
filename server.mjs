@@ -20,6 +20,8 @@ app.use('/documentation', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 
 // Middleware
 app.use(express.json());
+
+// Routes
 app.use("/users", userRoutes);
 app.use("/reports", reportRoutes);
 app.use("/replies", replyRoutes);
@@ -28,8 +30,6 @@ app.use("/priorities", priorityRoutes);
 app.use("/categories", categoryRoutes);
 app.use("/audits", auditRoutes);
 
-
-// Routes
 app.get("/", (req, res) => {
   res.send("Hello, world!!!");
 });
