@@ -12,8 +12,7 @@ import {
   authMiddleware,
   authMiddlewareWithRole,
 } from "../middleware/authMiddleware.mjs"
-import multer from "multer"
-import { upload } from "../config/storageConfig.mjs"
+
 
 const router = express.Router()
 
@@ -34,16 +33,12 @@ const router = express.Router()
  *       200:
  *         description: Report created successfully
  */
-router.post("/create", authMiddleware, (req, res, next) => {
-  upload.single('media')(req, res, function (err) {
-    if (err instanceof multer.MulterError) {
-      return res.status(400).json({ error: err.message });
-    } else if (err) {
-      return res.status(500).json({ error: err.message });
-    }
-    next();
-  });
-}, createReport);
+router.post("/create", authMiddleware, createReport);
+
+// Add this new route to generate Dropbox upload URL
+router.get("/create-upload-url", authMiddleware, getDropboxUploadUrl);
+
+
 
 /**
  * @swagger
