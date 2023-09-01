@@ -4,16 +4,9 @@ import {
 } from "../models/ReportModel.mjs"
 import { getReportsByPriorityIdModel } from "../models/PriorityModel.mjs"
 import { getAllCategoriesModel } from "../models/CategoryModel.mjs"
-import { createAuditLogModel } from "../models/AuditLogModel.mjs"
 
 export const getAdminDashboard = async (req, res) => {
-  const userId = req.user.id
-
   try {
-    // Create an audit log for fetching admin dashboard data
-    await createAuditLogModel(userId, null, "FETCH_ADMIN_DASHBOARD")
-
-
     // Fetching all reports for the admin dashboard
     const reports = await getAllReportsModel()
     const priorities = await getAllPrioritiesModel()

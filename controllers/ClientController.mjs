@@ -2,15 +2,11 @@ import {
   getReportsByUserIdModel,
 } from "../models/ReportModel.mjs"
 import { getAllCategoriesModel } from "../models/CategoryModel.mjs"
-import { createAuditLogModel } from "../models/AuditLogModel.mjs"
 
 export const getClientDashboard = async (req, res) => {
   const userId = req.user.id
 
   try {
-    // Create an audit log for fetching client dashboard data
-    await createAuditLogModel(userId, null, "FETCH_CLIENT_DASHBOARD")
-
     // Fetching the client's reports and categories
     const reports = await getReportsByUserIdModel(userId)
     const categories = await getAllCategoriesModel()
