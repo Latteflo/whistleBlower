@@ -6,7 +6,6 @@ import {
   deleteReport,
   getReportsByPriorityColor,
   getAllReports,
-  getDropboxUploadUrl,
   updateReportStatusController,
   getReportsByStatus,
 } from "../controllers/ReportController.mjs"
@@ -22,7 +21,6 @@ const router = express.Router()
 // Create a new report
 router.post("/", authMiddleware, createReport);
 router.patch("/media/:id", updateReportMediaController);
-router.get("/create-upload-url", authMiddleware, getDropboxUploadUrl);
 router.get("/", authMiddlewareWithRole("admin"), getAllReports);
 router.get("/:id", authMiddleware, getReportById);
 router.put("/:id", authMiddleware, updateReport);

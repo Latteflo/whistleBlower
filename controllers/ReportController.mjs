@@ -107,6 +107,7 @@ export const updateReportStatusById = async (req, res) => {
 };
 
 
+
 // Endpoint to update media for a report
 export const updateReportMedia = async (req, res) => {
   try {
