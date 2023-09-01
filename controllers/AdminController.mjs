@@ -2,19 +2,20 @@ import {
   getAllReportsModel,
   getReportsByCategoryIdModel,
 } from "../models/ReportModel.mjs"
-import { getReportsByPriorityIdModel } from "../models/PriorityModel.mjs"
+import {
+  getReportsByPriorityIdModel,
+  getAllPrioritiesModel,
+} from "../models/PriorityModel.mjs"
 import { getAllCategoriesModel } from "../models/CategoryModel.mjs"
 
 export const getAdminDashboard = async (req, res) => {
   try {
-    
     // Fetching all reports for the admin dashboard
     const reports = await getAllReportsModel()
     const priorities = await getAllPrioritiesModel()
-    const prioritiesById = await getReportsByPriorityIdModel() 
+    const prioritiesById = await getReportsByPriorityIdModel()
     const categories = await getAllCategoriesModel()
     const categoriesById = await getReportsByCategoryIdModel()
-
 
     // Group reports by status and priority for summary
     const reportsByStatus = reports.reduce((acc, report) => {
