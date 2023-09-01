@@ -1,6 +1,6 @@
 import passport from 'passport';
 import { Strategy as JwtStrategy, ExtractJwt } from 'passport-jwt';
-import { getUserById } from '../models/UserModel.mjs';
+import { getUserByIdModel } from '../models/UserModel.mjs';
 import dotenv from 'dotenv';
 
 dotenv.config();
@@ -14,7 +14,7 @@ passport.use(new JwtStrategy(options, (jwtPayload, done) => {
   // Find the user by the ID in the JWT payload 
    console.log(jwtPayload)
 
-  getUserById(jwtPayload.id)
+  getUserByIdModel(jwtPayload.id)
     .then((user) => {
       if (user) {
         return done(null, user);
