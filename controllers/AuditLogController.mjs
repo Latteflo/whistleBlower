@@ -10,7 +10,7 @@ export const createAuditLog = async (req, res) => {
     }
 };
 
-export const getAuditLogs = async (req, res) => {
+export const getAuditLogsByReportId = async (req, res) => {
     try {
         const auditLogs = await getAuditLogsByReportIdModel(req.params.id);
         if (auditLogs.length === 0) {
