@@ -1,23 +1,27 @@
 import express from "express"
 import {
- createCategoryController as createCategory,
- getAllCategoriesController as getAllCategories,
- getReportsByCategoryIdController as getReportsByCategory,
+  createCategory,
+  getAllCategories,
+  getCategoryById,
+  getReportsByCategoryId,
+  updateCategory,
+  deleteCategory,
 } from "../controllers/CategoryController.mjs"
 import { authMiddlewareWithRole } from "../middleware/authMiddleware.mjs"
 
-const router = express.Router()
-router.post(
-  "/",
-  authMiddlewareWithRole("admin"),
-  createCategory  
-)
-router.get("/", getAllCategories) 
-
+router.post("/categories", authMiddlewareWithRole("admin"), createCategory)
+router.get("/categories", authMiddlewareWithRole("admin"), getAllCategories)
+router.get("/categories/:id", authMiddlewareWithRole("admin"), getCategoryById)
 router.get(
-  "/:id/reports",
+  "/categories/:id/reports",
   authMiddlewareWithRole("admin"),
-  getReportsByCategory
+  getReportsByCategoryId
+)
+router.put("/categories/:id", authMiddlewareWithRole("admin"), updateCategory)
+router.delete(
+  "/categories/:id",
+  authMiddlewareWithRole("admin"),
+  deleteCategory
 )
 
 export default router

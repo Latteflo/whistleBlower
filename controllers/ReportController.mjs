@@ -1,14 +1,14 @@
 import {
-  createReport as createReportModel,
-  getReportById as getReportByIdModel,
-  getAllReports as getAllReportsModel,
-  updateReport as updateReportByIdModel,
-  deleteReport as deleteReportByIdModel,
-  getReportsByUserId as getReportsByUserIdModel,
-  updateReportStatus,
-  updateReportMedia,
+createReportModel,getAllReportsModel,
+
+getReportByIdModel,
+updateReportByIdModel,
+deleteReportByIdModel,
+getReportsByUserIdModel,
+updateReportStatusModel,
+updateReportMediaModel,
+getReportsByCategoryIdModel,
 } from "../models/ReportModel.mjs";
-import { dbx } from "../config/storageConfig.mjs";
 
 // Function to create a report
 export const createReport = async (req, res) => {
@@ -84,69 +84,34 @@ export const getAllReports = async (req, res) => {
   }
 }
 
-// Function to get reports by priority color
-export const getReportsByPriorityColor = async (req, res) => {
+// Function to update the status of a report
+export const updateReportStatusById = async (req, res) => {
   try {
-    const colorCode = req.params.colorCode || null
-    let query = `
-      SELECT reports.* 
-      FROM reports 
-      JOIN priority ON reports.priority_id = priority.id
-    `
+    const { id } = req.params;
+    const { status } = req.body;
+    const updatedReport = await updateReportStatusModel(id, status);  // Call the model function
 
-    if (colorCode) {
-      query += " WHERE priority.color_code = $1"
+    if (updatedReport) {
+      res.json({ success: true, report: updatedReport });
+    } else {
+      res.status(400).json({ success: false, message: "Failed to update report status." });
     }
-
-    const result = await pool.query(query, colorCode ? [colorCode] : [])
-    res.status(200).json({ data: result.rows })
   } catch (error) {
-    res.status(500).json({ message: "Error retrieving reports", error })
-  }
-}
-
-
-// Function to retrieve reports by status
-export const updateReportStatusController = async (req, res) => {
-  try {
-    const reportId = req.params.id
-    const status = req.body.status
-
-    // Updating the report's status
-    await updateReportStatus(reportId, status)
-
-    // Returning a success response
-    res.status(200).json({
-      success: true,
-      message: "Report status updated successfully.",
-    })
-  } catch (error) {
-    console.error(error)
+    console.error("Error updating report status:", error);
     res.status(500).json({
       success: false,
       message: "An error occurred while updating the report status.",
-    })
-  }
-}
-
-// Function to generate Dropbox upload URL
-export const getDropboxUploadUrl = async (req, res) => {
-  try {
-    const path = `/Whistleblower-Becode/${Date.now()}-${req.query.filename}`;
-    const uploadUrl = await dbx.filesGetTemporaryUploadLink({ path });
-    res.status(200).json({ uploadUrl: uploadUrl.link });
-  } catch (error) {
-    res.status(500).json({ error: 'Unable to generate Dropbox URL' });
+    });
   }
 };
 
 
 // Endpoint to update media for a report
-export const updateReportMediaController = async (req, res) => {
+export const updateReportMedia = async (req, res) => {
   try {
     console.log("Received request to update media", req.body);
     const { reportId, newMediaURL } = req.body;
-    const updatedReport = await updateReportMedia(reportId, newMediaURL);
+    const updatedReport = await updateReportMediaModel(reportId, newMediaURL);
 
     if (updatedReport) {
       console.log("Successfully updated media for report", updatedReport);
@@ -160,4 +125,14 @@ export const updateReportMediaController = async (req, res) => {
     res.status(500).json({ success: false, message: 'An error occurred while updating media.' });
   }
 };
+
+// Function to get reports by category ID
+export const getReportsByCategoryId = async (req, res) => {
+  try {
+    const reports = await getReportsByCategoryIdModel(req.params.id)
+    res.status(200).json({ data: reports })
+  } catch (error) {
+    res.status(400).json({ message: "Error retrieving reports by category", error })
+  }
+}
 

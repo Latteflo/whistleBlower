@@ -1,7 +1,7 @@
 import { pool } from "../config/db.mjs"
 
 // Function to create a report
-export const createReport = async (reportData , userId) => {  
+export const createReportModel = async (reportData , userId) => {  
   const {
       categoryId, 
       priorityId, 
@@ -53,7 +53,7 @@ export const createReport = async (reportData , userId) => {
 
 
 // Function to retrieve all reports
-export const getAllReports = async () => {
+export const getAllReportsModel = async () => {
   const query = "SELECT * FROM reports"
   try {
     const result = await pool.query(query)
@@ -65,7 +65,7 @@ export const getAllReports = async () => {
 }
 
 // Function to retrieve a report by ID
-export const getReportById = async (reportId) => {
+export const getReportByIdModel = async (reportId) => {
   const query = "SELECT * FROM reports WHERE id = $1"
   try {
     const result = await pool.query(query, [reportId])
@@ -77,22 +77,24 @@ export const getReportById = async (reportId) => {
 }
 
 // Function to update a report
-export const updateReport = async (reportId, title, description, status) => {
+export const updateReportByIdModel = async (reportId, title, description, status) => {
+
   const query =
-    "UPDATE reports SET title = $1, description = $2, status = $3, updated_at = NOW() WHERE id = $4 RETURNING *"
-  const values = [title, description, status, reportId]
+    "UPDATE reports SET title = $1, description = $2, status = $3, updated_at = NOW() WHERE id = $4 RETURNING *";
+  const values = [title, description, status, reportId];
 
   try {
-    const result = await pool.query(query, values)
-    return result.rows[0]
+    const result = await pool.query(query, values);
+    return result.rows[0];
   } catch (err) {
-    console.error("Error in fetching reports:", err)
-    return []
+    console.error("Error in updating report:", err); 
+    return null;  
   }
-}
+};
+
 
 // Function to delete a report
-export const deleteReport = async (reportId) => {
+export const deleteReportByIdModel = async (reportId) => {
   const query = "DELETE FROM reports WHERE id = $1 RETURNING *"
 
   try {
@@ -105,7 +107,7 @@ export const deleteReport = async (reportId) => {
 }
 
 // Function to retrieve reports by user ID
-export const getReportsByUserId = async (userId) => {
+export const getReportsByUserIdModel = async (userId) => {
   try {
     // Query to fetch all reports for a specific user by user ID
     const query = "SELECT * FROM reports WHERE user_id = $1"
@@ -118,31 +120,23 @@ export const getReportsByUserId = async (userId) => {
   }
 }
 
-// Function to update a report status
-export const updateReportStatus = async (req, res) => {
+// Function to update the report status
+export const updateReportStatusModel = async (reportId, newStatus) => {
+  const query = "UPDATE reports SET status = $1 WHERE id = $2 RETURNING *";
+  const values = [newStatus, reportId];
+
   try {
-    // Extract report ID and new status from request
-    const { id } = req.params
-    const { status } = req.body
-
-    // Call the corresponding model function to update the report status in the database
-    const updatedReport = await updateReportStatus(id, status)
-
-    // Send a successful response with the updated report
-    res.json({ success: true, report: updatedReport })
-  } catch (error) {
-    // Handle any errors that occurred during the update
-    console.error("Error updating report status:", error)
-    res.status(500).json({
-      success: false,
-      message: "An error occurred while updating the report status",
-    })
+    const result = await pool.query(query, values);
+    return result.rows[0];
+  } catch (err) {
+    console.error("Error in updating report status:", err);
+    return null;
   }
-}
+};
 
 
 // Function to update media URL for a report
-export const updateReportMedia = async (reportId, newMediaURL) => {
+export const updateReportMediaModel = async (reportId, newMediaURL) => {
   const query = "UPDATE reports SET media = $1 WHERE id = $2 RETURNING *";
   const values = [newMediaURL, reportId];
 
@@ -158,7 +152,7 @@ export const updateReportMedia = async (reportId, newMediaURL) => {
 };
 
 // Function to retrieve reports by category ID
-export const getReportsByCategoryId = async (categoryId) => {
+export const getReportsByCategoryIdModel = async (categoryId) => {
   const query = "SELECT * FROM reports WHERE category_id = $1"
   try {
     const result = await pool.query(query, [categoryId])
