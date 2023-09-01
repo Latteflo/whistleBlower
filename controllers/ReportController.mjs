@@ -1,6 +1,6 @@
 import {
-createReportModel,getAllReportsModel,
-
+createReportModel,
+getAllReportsModel,
 getReportByIdModel,
 updateReportByIdModel,
 deleteReportByIdModel,

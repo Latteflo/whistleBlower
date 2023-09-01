@@ -1,18 +1,18 @@
-import { createAuditLog, getAuditLogsByReportId } from '../models/AuditLogModel.mjs';
+import { createAuditLogModel, getAuditLogsByReportIdModel} from '../models/AuditLogModel.mjs';
 
-export const createAuditLogController = async (req, res) => {
+export const createAuditLog = async (req, res) => {
     try {
         const { userId, reportId, action } = req.body;
-        const auditLog = await createAuditLog(userId, reportId, action);
+        const auditLog = await createAuditLogModel(userId, reportId, action);
         res.status(201).json({ message: 'Audit log created successfully', data: auditLog });
     } catch (error) {
         res.status(400).json({ message: 'Error creating audit log', error });
     }
 };
 
-export const getAuditLogsByReport = async (req, res) => {
+export const getAuditLogs = async (req, res) => {
     try {
-        const auditLogs = await getAuditLogsByReportId(req.params.id);
+        const auditLogs = await getAuditLogsByReportIdModel(req.params.id);
         if (auditLogs.length === 0) {
             return res.status(404).json({ message: 'Audit logs not found for this report' });
         }

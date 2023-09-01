@@ -1,9 +1,10 @@
 import bcrypt from "bcrypt"
 import jwt from "jsonwebtoken"
 import {
-  createUser,
-  getUserByUsername,
-  getUserById,
+  createUserModel,
+  getUserByIdModel,
+  getUserByUsernameModel,
+  getAllUsersModel,
 } from "../models/UserModel.mjs"
 
 // Function to register a user
@@ -20,7 +21,7 @@ export const register = async (req, res) => {
     const hashedPassword = await bcrypt.hash(password, 10)
 
     // Create the user with the specified or default role
-    const user = await createUser(
+    const user = await createUserModel(
       username,
       email,
       hashedPassword,
@@ -42,7 +43,7 @@ export const registerAdmin = async (req, res) => {
     const hashedPassword = await bcrypt.hash(password, 10)
 
     // Create the user with the admin role
-    const user = await createUser(username, email, hashedPassword, "admin")
+    const user = await createUserModel(username, email, hashedPassword, "admin")
 
     res.status(201).json({ message: "Admin registered successfully", user })
   } catch (error) {
@@ -55,7 +56,7 @@ export const login = async (req, res) => {
     const { username, password } = req.body
 
     // Find the user by username
-    const user = await getUserByUsername(username)
+    const user = await getUserByUsernameModel(username)
     if (!user) {
       return res.status(400).json({ message: "Invalid username or password" })
     }
@@ -84,8 +85,17 @@ export const login = async (req, res) => {
 export const profile = async (req, res) => {
   try {
     // Retrieve and return user profile
-    const user = await getUserById(req.user.id)
+    const user = await getUserByIdModel(req.user.id)
     res.json(user)
+  } catch (error) {
+    res.status(500).json({ error: error.message })
+  }
+}
+
+export const getAllUsers = async (req, res) => {
+  try {
+    const users = await getAllUsersModel()
+    res.json(users)
   } catch (error) {
     res.status(500).json({ error: error.message })
   }

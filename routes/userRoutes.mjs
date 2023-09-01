@@ -4,6 +4,7 @@ import {
   login,
   registerAdmin,
   profile,
+  getAllUsers,
 } from "../controllers/UserController.mjs"
 import {
   authMiddleware,
@@ -15,24 +16,18 @@ import { getAdminDashboard } from "../controllers/AdminController.mjs"
 const router = express.Router()
 
 router.post("/register", register)
-
+router.post("/register-admin", registerAdmin)
 
 router.post("/login", login)
 
-
-router.post("/register-admin", registerAdmin)
-
-
 router.get("/profile", authMiddleware, profile)
-
-
 router.get("/client/dashboard", authMiddleware, getClientDashboard)
-
-
 router.get(
   "/admin/dashboard",
   authMiddlewareWithRole("admin"),
   getAdminDashboard
 )
+
+router.get("/all", authMiddlewareWithRole("admin"), getAllUsers)
 
 export default router

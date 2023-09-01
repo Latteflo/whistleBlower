@@ -1,31 +1,34 @@
 import { pool } from "../config/db.mjs"
 
 // Function to create a report
-export const createReportModel = async (reportData , userId) => {  
+
+export const createReportModel = async (reportData, userId) => {
+  // Destructure report data
   const {
-      categoryId, 
-      priorityId, 
-      title, 
-      description, 
-      media, 
-      isAnonymous, 
-      involveOthers, 
-      status 
-    } = reportData;
-  
-    const values = [
-      userId, 
-      categoryId, 
-      priorityId, 
-      title, 
-      description, 
-      media, 
-      isAnonymous, 
-      involveOthers, 
-      status
-    ];
-    
-    const query = `
+    categoryId,
+    priorityId,
+    title,
+    description,
+    media,
+    isAnonymous,
+    involveOthers,
+    status,
+  } = reportData;
+
+  // Values to be inserted
+  const values = [
+    userId,
+    categoryId,
+    priorityId,
+    title,
+    description,
+    media,
+    isAnonymous,
+    involveOthers,
+    status,
+  ];
+
+  const query = `
     INSERT INTO reports(
       user_id, 
       category_id, 
@@ -40,14 +43,13 @@ export const createReportModel = async (reportData , userId) => {
     VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9)
     RETURNING *;
   `;
-  console.log("Executing query with:", query, values);
 
   try {
     const result = await pool.query(query, values);
     return result.rows[0];
   } catch (err) {
     console.error("Error executing query", { query, values, err });
-    throw err;
+    throw new Error("Error in creating report");
   }
 };
 
