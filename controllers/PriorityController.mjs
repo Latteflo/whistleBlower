@@ -26,27 +26,6 @@ export const getAllPriorities = async (req, res) => {
   }
 }
 
-// Function to get reports by priority color
-export const getReportsByPriorityColor = async (req, res) => {
-  try {
-    const colorCode = req.params.colorCode || null
-    let query = `
-      SELECT reports.* 
-      FROM reports 
-      JOIN priority ON reports.priority_id = priority.id
-    `
-
-    if (colorCode) {
-      query += " WHERE priority.color_code = $1"
-    }
-
-    const result = await pool.query(query, colorCode ? [colorCode] : [])
-    res.status(200).json({ data: result.rows })
-  } catch (error) {
-    res.status(500).json({ message: "Error retrieving reports", error })
-  }
-}
-
 
 
 // Function to retrieve reports by priority ID
