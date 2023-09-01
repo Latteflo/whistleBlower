@@ -1,22 +1,26 @@
 import {
-  getAllReports,
-  getReportsByPriorityId,
-  getReportsByCategoryId,
+  getAllReportsModel,
+  getReportsByPriorityIdModel,
+  getReportsByCategoryIdModel,
 } from "../models/ReportModel.mjs"
-import { getAllCategories } from "../models/CategoryModel.mjs"
-import { createAuditLog } from "../models/AuditLogModel.mjs"
+import { getAllCategoriesModel } from "../models/CategoryModel.mjs"
+import { createAuditLogModel } from "../models/AuditLogModel.mjs"
 
 export const getAdminDashboard = async (req, res) => {
   const userId = req.user.id
 
   try {
     // Create an audit log for fetching admin dashboard data
-    await createAuditLog(userId, null, "FETCH_ADMIN_DASHBOARD")
+    await createAuditLogModel(userId, null, "FETCH_ADMIN_DASHBOARD")
 
 
     // Fetching all reports for the admin dashboard
-    const reports = await getAllReports()
-    const priorities = await getAllPrioritiesModel() 
+    const reports = await getAllReportsModel()
+    const priorities = await getAllPrioritiesModel()
+    const prioritiesById = await getReportsByPriorityIdModel() 
+    const categories = await getAllCategoriesModel()
+    const categoriesById = await getReportsByCategoryIdModel()
+
 
     // Group reports by status and priority for summary
     const reportsByStatus = reports.reduce((acc, report) => {
@@ -36,9 +40,9 @@ export const getAdminDashboard = async (req, res) => {
       reportsByStatus,
       reportsByPriority,
       priorities,
-      getReportsByCategoryId,
-      getReportsByPriorityId,
-      getAllCategories,
+      prioritiesById,
+      categories,
+      categoriesById,
     })
   } catch (error) {
     console.error(

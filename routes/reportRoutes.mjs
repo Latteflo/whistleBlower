@@ -8,6 +8,7 @@ import {
   getAllReports,
   getDropboxUploadUrl,
   updateReportStatusController,
+  getReportsByStatus,
 } from "../controllers/ReportController.mjs"
 import {
   authMiddleware,
@@ -28,6 +29,7 @@ router.put("/:id", authMiddleware, updateReport);
 router.delete("/:id", authMiddleware, deleteReport);
 router.get("/priority-color/:color", authMiddlewareWithRole("admin"), getReportsByPriorityColor);
 router.put("/:id/status", authMiddleware, updateReportStatusController);
+router.get("/status", authMiddlewareWithRole("admin"), getReportsByStatus);
 
 export default router;
 

@@ -165,3 +165,14 @@ export const getReportsByCategoryIdModel = async (categoryId) => {
   }
 }
 
+// Function to retrieve reports by status
+export const getReportsByStatusModel = async (status) => {
+  const query = "SELECT * FROM reports WHERE status = $1"
+  try {
+    const result = await pool.query(query, [status])
+    return result.rows
+  } catch (err) {
+    console.error("Error in fetching reports:", err)
+    return []
+  }
+}

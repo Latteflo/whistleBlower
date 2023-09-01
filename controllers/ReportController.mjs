@@ -6,6 +6,7 @@ updateReportByIdModel,
 deleteReportByIdModel,
 getReportsByUserIdModel,
 updateReportStatusModel,
+getReportsByStatusModel,
 updateReportMediaModel,
 getReportsByCategoryIdModel,
 } from "../models/ReportModel.mjs";
@@ -136,3 +137,12 @@ export const getReportsByCategoryId = async (req, res) => {
   }
 }
 
+// Function to get reports by status
+export const getReportsByStatus = async (req, res) => {
+  try {
+    const reports = await getReportsByStatusModel(req.params.status)
+    res.status(200).json({ data: reports })
+  } catch (error) {
+    res.status(400).json({ message: "Error retrieving reports by status", error })
+  }
+}

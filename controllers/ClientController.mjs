@@ -1,19 +1,19 @@
 import {
-  getReportsByUserId,
+  getReportsByUserIdModel,
 } from "../models/ReportModel.mjs"
-import { getAllCategories } from "../models/CategoryModel.mjs"
-import { createAuditLog } from "../models/AuditLogModel.mjs"
+import { getAllCategoriesModel } from "../models/CategoryModel.mjs"
+import { createAuditLogModel } from "../models/AuditLogModel.mjs"
 
 export const getClientDashboard = async (req, res) => {
   const userId = req.user.id
 
   try {
     // Create an audit log for fetching client dashboard data
-    await createAuditLog(userId, null, "FETCH_CLIENT_DASHBOARD")
+    await createAuditLogModel(userId, null, "FETCH_CLIENT_DASHBOARD")
 
     // Fetching the client's reports and categories
-    const reports = await getReportsByUserId(userId)
-    const categories = await getAllCategories()
+    const reports = await getReportsByUserIdModel(userId)
+    const categories = await getAllCategoriesModel()
     // Group reports by status and priority for summary
     const reportsByStatus = reports.reduce((acc, report) => {
       acc[report.status] = (acc[report.status] || 0) + 1
