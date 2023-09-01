@@ -1,8 +1,8 @@
 import {
   getAllReportsModel,
-  getReportsByPriorityIdModel,
   getReportsByCategoryIdModel,
 } from "../models/ReportModel.mjs"
+import { getReportsByPriorityIdModel } from "../models/PriorityModel.mjs"
 import { getAllCategoriesModel } from "../models/CategoryModel.mjs"
 import { createAuditLogModel } from "../models/AuditLogModel.mjs"
 
