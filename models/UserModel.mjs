@@ -50,6 +50,18 @@ export const getUserByUsernameModel = async (username) => {
   }
 };
 
+// Function to retrieve a user by email
+export const getUserByEmailModel = async (email) => {
+  const query = "SELECT ua.*, ur.role FROM user_auth AS ua JOIN user_role AS ur ON ua.id = ur.auth_id WHERE ua.email = $1";
+  try {
+    const result = await pool.query(query, [email]);
+    return result.rows[0];
+  } catch (err) {
+    console.error("Error while fetching user by email:", err);
+    throw err;
+  }
+};
+
 // Function to retrieve all users
 export const getAllUsersModel = async () => {
   const query = "SELECT ua.*, ur.role FROM user_auth AS ua JOIN user_role AS ur ON ua.id = ur.auth_id";

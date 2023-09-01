@@ -5,6 +5,7 @@ import {
   getUserByIdModel,
   getUserByUsernameModel,
   getAllUsersModel,
+  getUserByEmailModel
 } from "../models/UserModel.mjs"
 
 // Function to register a user
@@ -51,12 +52,15 @@ export const registerAdmin = async (req, res) => {
   }
 }
 
+// Function to login a user or admin - works for both
 export const login = async (req, res) => {
   try {
     const { username, password } = req.body
 
-    // Find the user by username
-    const user = await getUserByUsernameModel(username)
+    // Find the user by username OR email
+    const user = await getUserByUsernameModel(username) || await getUserByEmailModel(username)    
+
+    // Check if the user exists
     if (!user) {
       return res.status(400).json({ message: "Invalid username or password" })
     }
@@ -82,6 +86,7 @@ export const login = async (req, res) => {
   }
 }
 
+// Function to retrieve a user profile
 export const profile = async (req, res) => {
   try {
     // Retrieve and return user profile
@@ -92,6 +97,7 @@ export const profile = async (req, res) => {
   }
 }
 
+// Function to retrieve all users
 export const getAllUsers = async (req, res) => {
   try {
     const users = await getAllUsersModel()
