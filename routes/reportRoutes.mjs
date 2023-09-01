@@ -5,9 +5,9 @@ import {
   updateReport,
   deleteReport,
   getAllReports,
-  updateReportStatusController,
+  updateReportMedia,
   getReportsByStatus,
-  updateReportMediaController,
+  updateReportStatusById,
 } from "../controllers/ReportController.mjs"
 import {
   authMiddleware,
@@ -19,7 +19,7 @@ const router = express.Router()
 
 // Create a new report
 router.post("/", authMiddleware, createReport)
-router.patch("/media/:id", updateReportMediaController)
+router.patch("/media/:id", updateReportMedia)
 router.get("/", authMiddlewareWithRole("admin"), getAllReports)
 router.get("/:id", authMiddleware, getReportById)
 router.put("/:id", authMiddleware, updateReport)
@@ -29,7 +29,7 @@ router.get(
   authMiddlewareWithRole("admin"),
   getReportsByPriorityColor
 )
-router.put("/:id/status", authMiddleware, updateReportStatusController)
+router.put("/:id/status", authMiddleware, updateReportStatusById)
 router.get("/status", authMiddlewareWithRole("admin"), getReportsByStatus)
 
 export default router
