@@ -7,6 +7,7 @@ import { getAllCategoriesModel } from "../models/CategoryModel.mjs"
 
 export const getAdminDashboard = async (req, res) => {
   try {
+    
     // Fetching all reports for the admin dashboard
     const reports = await getAllReportsModel()
     const priorities = await getAllPrioritiesModel()

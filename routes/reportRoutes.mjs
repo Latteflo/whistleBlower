@@ -18,7 +18,7 @@ import { getReportsByPriorityColor } from "../controllers/PriorityController.mjs
 const router = express.Router()
 
 // Create a new report
-router.post("/", authMiddleware, createReport)
+router.post("/create", authMiddleware, createReport)
 router.patch("/media/:id", updateReportMedia)
 router.get("/", authMiddlewareWithRole("admin"), getAllReports)
 router.get("/:id", authMiddleware, getReportById)
