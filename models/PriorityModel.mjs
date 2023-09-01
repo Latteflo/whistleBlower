@@ -1,11 +1,11 @@
 import { pool } from "../config/db.mjs";
 
 // Function to initialize priorities
-export const initializePriorities = async () => {
+export const initializePrioritiesModel = async () => {
   const priorities = [
-    { name: "High", colorCode: "#FF0000" },
-    { name: "Medium", colorCode: "#FFFF00 " },
-    { name: "Low", colorCode: "#00FF00" },
+    { name: "High", colorCode: "red" },
+    { name: "Medium", colorCode: "orange" },
+    { name: "Low", colorCode: "yellow" },
   ]
 
   try {
@@ -23,7 +23,7 @@ export const initializePriorities = async () => {
 }
 
 // Function to retrieve all priorities
-export const getAllPriorities = async () => {
+export const getAllPrioritiesModel = async () => {
   const query = 'SELECT * FROM priority';
   try {
     const result = await pool.query(query)
@@ -34,3 +34,30 @@ export const getAllPriorities = async () => {
   }
   
 }
+
+// Function to retrieve all reports by color
+export const getReportsByPriorityColorModel = async (color) => {
+  const query =
+    "SELECT r.*, c.name AS category, p.name AS priority FROM reports AS r JOIN categories AS c ON r.category_id = c.id JOIN priorities AS p ON r.priority_id = p.id WHERE p.color = $1"
+  try {
+    const result = await pool.query(query, [color])
+    return result.rows
+  } catch (err) {
+    console.error("Error in fetching reports:", err)
+    return []
+  }
+}
+
+// Function to retrieve reports by priority ID
+export const getReportsByPriorityIdModel = async (priorityId) => {
+  const query = "SELECT * FROM reports WHERE priority_id = $1"
+  try {
+    const result = await pool.query(query, [priorityId])
+    return result.rows
+  } catch (err) {
+    console.error("Error in fetching reports:", err)
+    return []
+  }
+}
+
+

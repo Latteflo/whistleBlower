@@ -104,18 +104,6 @@ export const deleteReport = async (reportId) => {
   }
 }
 
-// Function to retrieve all reports by color
-export const getReportsByPriorityColor = async (color) => {
-  const query =
-    "SELECT r.*, c.name AS category, p.name AS priority FROM reports AS r JOIN categories AS c ON r.category_id = c.id JOIN priorities AS p ON r.priority_id = p.id WHERE p.color = $1"
-  try {
-    const result = await pool.query(query, [color])
-    return result.rows
-  } catch (err) {
-    console.error("Error in fetching reports:", err)
-    return []
-  }
-}
 // Function to retrieve reports by user ID
 export const getReportsByUserId = async (userId) => {
   try {
@@ -180,19 +168,4 @@ export const getReportsByCategoryId = async (categoryId) => {
     return []
   }
 }
-
-// Function to retrieve reports by priority ID
-export const getReportsByPriorityId = async (priorityId) => {
-  const query = "SELECT * FROM reports WHERE priority_id = $1"
-  try {
-    const result = await pool.query(query, [priorityId])
-    return result.rows
-  } catch (err) {
-    console.error("Error in fetching reports:", err)
-    return []
-  }
-}
-
-
-
 
