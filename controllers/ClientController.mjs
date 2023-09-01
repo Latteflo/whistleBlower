@@ -1,6 +1,7 @@
 import { getReportsByUserId } from '../models/ReportModel.mjs'; 
 import { getAllCategories } from '../models/CategoryModel.mjs';
 
+
 export const getClientDashboard = async (req, res) => {
   try {
     const userId = req.user.id; 

@@ -8,6 +8,7 @@ import {
   deleteCategory,
 } from "../controllers/CategoryController.mjs"
 import { authMiddlewareWithRole } from "../middleware/authMiddleware.mjs"
+const router = express.Router();
 
 router.post("/categories", authMiddlewareWithRole("admin"), createCategory)
 router.get("/categories", authMiddlewareWithRole("admin"), getAllCategories)
