@@ -7,7 +7,7 @@ import { authMiddleware } from "../middleware/authMiddleware.mjs"
 
 const router = express.Router()
 
-router.get("/search/reports", authMiddleware, searchReports)
-router.get("/search/categories", authMiddleware, searchCategories)
+router.get("/reports", authMiddleware, searchReports)
+router.get("/categories", authMiddleware, searchCategories)
 
 export default router

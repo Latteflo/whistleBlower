@@ -9,7 +9,7 @@ import { authMiddleware } from '../middleware/authMiddleware.mjs';
 
 const router = express.Router();
 
-router.post("/", authMiddleware, createReply);
+router.post("/create", authMiddleware, createReply);
 router.get("/:reportId", authMiddleware, getReplyById);
 router.put("/:id", authMiddleware, updateReply);
 router.delete("/:id", authMiddleware, deleteReply);

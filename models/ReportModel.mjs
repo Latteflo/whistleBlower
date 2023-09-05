@@ -136,7 +136,6 @@ export const updateReportStatusModel = async (reportId, newStatus) => {
   }
 };
 
-
 // Function to update media URL for a report
 export const updateReportMediaModel = async (reportId, newMediaURL) => {
   const query = "UPDATE reports SET media = $1 WHERE id = $2 RETURNING *";

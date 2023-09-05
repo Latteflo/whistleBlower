@@ -10,18 +10,37 @@ getReportsByStatusModel,
 updateReportMediaModel,
 getReportsByCategoryIdModel,
 } from "../models/ReportModel.mjs";
+import  {uploadToDropbox} from "../config/storageConfig.mjs";
+
 
 // Function to create a report
 export const createReport = async (req, res) => {
   try {
     const userId = req.user.id;
-    const report = await createReportModel(req.body, userId);
-    res.status(201).json({ message: "Report created successfully", data: report });
+    const { body, files } = req; 
+
+    // Convert the uploaded file to a Buffer
+    const mediaBuffer = Buffer.from(files.media.data);
+
+    // Upload media to Dropbox and get the shareable link
+    const dropboxLink = await uploadToDropbox(mediaBuffer, files.media.name);
+
+    if (dropboxLink) {
+      // Add or replace the media URL in the report data
+      body.mediaURL = dropboxLink;
+
+      const report = await createReportModel(body, userId);
+      res.status(201).json({ message: "Report created successfully", data: report });
+    } else {
+      res.status(400).json({ message: "Failed to upload media to Dropbox" });
+    }
   } catch (error) {
     console.error("Error while creating report: ", error);
     res.status(500).send("Internal Server Error");
   }
 };
+
+
 
 // Function to get a report by id
 export const getReportById = async (req, res) => {
@@ -49,17 +68,31 @@ export const getReportsByUserId = async (req, res) => {
 // Function to update a report
 export const updateReport = async (req, res) => {
   try {
-    const report = await updateReportByIdModel(req.params.id, req.body)
-    if (!report) {
-      return res.status(404).json({ message: "Report not found" })
+    const { body, files } = req;
+
+    if (files && files.media) {
+      const mediaBuffer = Buffer.from(files.media.data);
+
+      const dropboxLink = await uploadToDropbox(mediaBuffer, files.media.name);
+
+      if (dropboxLink) {
+        body.mediaURL = dropboxLink;
+      } else {
+        return res.status(400).json({ message: "Failed to upload media to Dropbox" });
+      }
     }
-    res
-      .status(200)
-      .json({ message: "Report updated successfully", data: report })
+
+    const report = await updateReportByIdModel(req.params.id, body);
+    if (!report) {
+      return res.status(404).json({ message: "Report not found" });
+    }
+    res.status(200).json({ message: "Report updated successfully", data: report });
+
   } catch (error) {
-    res.status(400).json({ message: "Error updating report", error })
+    console.error("Error updating report: ", error);
+    res.status(400).json({ message: "Error updating report", error });
   }
-}
+};
 
 // Function to delete a report
 export const deleteReport = async (req, res) => {
@@ -105,7 +138,6 @@ export const updateReportStatusById = async (req, res) => {
     });
   }
 };
-
 
 
 // Endpoint to update media for a report

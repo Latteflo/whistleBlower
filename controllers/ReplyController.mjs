@@ -3,61 +3,61 @@ import {
   getRepliesByReportIdModel,
   updateReplyModel,
   deleteReplyModel,
-} from "../models/ReplyModel.mjs"
+} from '../models/ReplyModel.mjs';
 
 // Function to create a reply
 export const createReply = async (req, res) => {
   try {
-    const { reportId, userId, text } = req.body
+    const { reportId, userId, text } = req.body;
     if (!reportId || !userId || !text) {
-      return res.status(400).json({ message: "Missing required fields" })
+      return res.status(400).json({ message: 'Missing required fields' });
     }
-    const reply = await createReplyModel(reportId, userId, text)
-    res.status(201).json({ message: "Reply created successfully", data: reply })
+    const reply = await createReplyModel(reportId, userId, text);
+    res.status(201).json({ message: 'Reply created successfully', data: reply });
   } catch (error) {
-    res.status(500).json({ message: "Error creating reply", error })
+    res.status(500).json({ message: 'Error creating reply', error });
   }
-}
+};
 
 // Function to get replies by report ID
 export const getReplyById = async (req, res) => {
   try {
-    const replies = await getRepliesByReportIdModel(req.params.id)
+    const replies = await getRepliesByReportIdModel(req.params.id);
     if (!replies.length) {
-      return res.status(404).json({ message: "Replies not found" })
+      return res.status(404).json({ message: 'Replies not found' });
     }
-    res.status(200).json({ data: replies })
+    res.status(200).json({ data: replies });
   } catch (error) {
-    res.status(500).json({ message: "Error retrieving replies", error })
+    res.status(500).json({ message: 'Error retrieving replies', error });
   }
-}
+};
 
 // Function to update a reply
 export const updateReply = async (req, res) => {
   try {
-    const { text } = req.body
+    const { text } = req.body;
     if (!text) {
-      return res.status(400).json({ message: "Text is required" })
+      return res.status(400).json({ message: 'Text is required' });
     }
-    const reply = await updateReplyModel(req.params.id, text)
+    const reply = await updateReplyModel(req.params.id, text);
     if (!reply) {
-      return res.status(404).json({ message: "Reply not found" })
+      return res.status(404).json({ message: 'Reply not found' });
     }
-    res.status(200).json({ message: "Reply updated successfully", data: reply })
+    res.status(200).json({ message: 'Reply updated successfully', data: reply });
   } catch (error) {
-    res.status(500).json({ message: "Error updating reply", error })
+    res.status(500).json({ message: 'Error updating reply', error });
   }
-}
+};
 
 // Function to delete a reply
 export const deleteReply = async (req, res) => {
   try {
-    const reply = await deleteReplyModel(req.params.id)
+    const reply = await deleteReplyModel(req.params.id);
     if (!reply) {
-      return res.status(404).json({ message: "Reply not found" })
+      return res.status(404).json({ message: 'Reply not found' });
     }
-    res.status(200).json({ message: "Reply deleted successfully" })
+    res.status(200).json({ message: 'Reply deleted successfully' });
   } catch (error) {
-    res.status(500).json({ message: "Error deleting reply", error })
+    res.status(500).json({ message: 'Error deleting reply', error });
   }
-}
+};
