@@ -5,6 +5,7 @@ import {
   registerAdmin,
   profile,
   getAllUsers,
+  updateUserPassword,
 } from "../controllers/UserController.mjs"
 import {
   authMiddleware,
@@ -22,5 +23,6 @@ router.get("/profile", authMiddleware, profile)
 router.get("/client/dashboard", authMiddleware, getClientDashboard)
 router.get("/admin/dashboard",authMiddlewareWithRole("admin"),getAdminDashboard)
 router.get("/all", authMiddlewareWithRole("admin"), getAllUsers)
+router.put("/update-password", authMiddleware, updateUserPassword);
 
 export default router

@@ -73,3 +73,19 @@ export const getAllUsersModel = async () => {
     throw err;
   }
 };
+
+// Function to update a user's password
+export const updateUserPasswordModel = async (userId, newPassword) => {
+  const hashedPassword = await bcrypt.hash(newPassword, 10);
+
+  const query = "UPDATE user_auth SET password = $1 WHERE id = $2 RETURNING id";
+  const values = [hashedPassword, userId];
+
+  try {
+    const result = await pool.query(query, values);
+    return result.rows[0]?.id ? true : false;
+  } catch (err) {
+    console.error('Error in updating user password:', err);
+    return false;
+  }
+};
