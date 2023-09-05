@@ -150,15 +150,16 @@ export const updateReportStatusById = async (req, res) => {
 // Endpoint to update media for a report
 export const updateReportMedia = async (req, res) => {
   try {
-    console.log("Received request to update media", req.body);
-    const { reportId, newMediaURL } = req.body;
-    const updatedReport = await updateReportMediaModel(reportId, newMediaURL);
+    const reportId = req.params.id;
+    const { newMediaURL } = req.body;
+    console.log(`Received request to update media with reportId: ${reportId} and newMediaURL: ${newMediaURL}`);
 
+    const updatedReport = await updateReportMediaModel(reportId, newMediaURL);
     if (updatedReport) {
       console.log("Successfully updated media for report", updatedReport);
       res.status(200).json({ success: true, updatedReport });
     } else {
-      console.warn("Failed to update media for reportId:", reportId);
+      console.warn(`Failed to update media for reportId: ${reportId}`);
       res.status(400).json({ success: false, message: 'Failed to update media.' });
     }
   } catch (error) {
@@ -166,6 +167,7 @@ export const updateReportMedia = async (req, res) => {
     res.status(500).json({ success: false, message: 'An error occurred while updating media.' });
   }
 };
+
 
 // Function to get reports by category ID
 export const getReportsByCategoryId = async (req, res) => {
