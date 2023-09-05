@@ -148,23 +148,33 @@ export const updateReportStatusById = async (req, res) => {
 
 
 // Endpoint to update media for a report
+// Endpoint to update media for a report
 export const updateReportMedia = async (req, res) => {
   try {
-    const reportId = req.params.id;
-    const { newMediaURL } = req.body;
-    console.log(`Received request to update media with reportId: ${reportId} and newMediaURL: ${newMediaURL}`);
+    const { files } = req;
+    const { id: reportId } = req.params;
 
-    const updatedReport = await updateReportMediaModel(reportId, newMediaURL);
-    if (updatedReport) {
-      console.log("Successfully updated media for report", updatedReport);
-      res.status(200).json({ success: true, updatedReport });
+    let newMediaURL = '';
+
+    if (files && files.media) {
+      // Upload media to Cloudinary
+      const result = await cloudinary.v2.uploader.upload(files.media.path);
+      newMediaURL = result.secure_url;
+
+      // Update the media URL in the database
+      const updatedReport = await updateReportMediaModel(reportId, newMediaURL);
+
+      if (updatedReport) {
+        return res.status(200).json({ success: true, updatedReport });
+      } else {
+        return res.status(400).json({ success: false, message: 'Failed to update media.' });
+      }
     } else {
-      console.warn(`Failed to update media for reportId: ${reportId}`);
-      res.status(400).json({ success: false, message: 'Failed to update media.' });
+      return res.status(400).json({ success: false, message: 'Media file is missing.' });
     }
   } catch (error) {
     console.error("An error occurred while updating media:", error);
-    res.status(500).json({ success: false, message: 'An error occurred while updating media.' });
+    return res.status(500).json({ success: false, message: 'An error occurred while updating media.' });
   }
 };
 
