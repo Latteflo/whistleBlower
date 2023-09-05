@@ -1,4 +1,5 @@
 import { generatePDF } from "../config/pdfConfig.mjs"
+import { getReportByIdModel } from "../models/reportModel.mjs"
 
 export const generateReportPDF = async (req, res) => {
   try {
