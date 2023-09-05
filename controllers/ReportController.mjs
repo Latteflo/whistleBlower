@@ -79,12 +79,12 @@ export const updateReport = async (req, res) => {
     if (files && files.media) {
       const mediaBuffer = Buffer.from(files.media.data);
 
-      const dropboxLink = await uploadToCloudinary (mediaBuffer, files.media.name);
+      const cloudinaryLink = await uploadToCloudinary (mediaBuffer, files.media.name);
 
-      if (dropboxLink) {
-        body.mediaURL = dropboxLink;
+      if (cloudinaryLink) {
+        body.mediaURL = cloudinaryLink;
       } else {
-        return res.status(400).json({ message: "Failed to upload media to Dropbox" });
+        return res.status(400).json({ message: "Failed to upload media" });
       }
     }
 
@@ -99,6 +99,7 @@ export const updateReport = async (req, res) => {
     res.status(400).json({ message: "Error updating report", error });
   }
 };
+
 
 // Function to delete a report
 export const deleteReport = async (req, res) => {
