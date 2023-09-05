@@ -10,7 +10,7 @@ getReportsByStatusModel,
 updateReportMediaModel,
 getReportsByCategoryIdModel,
 } from "../models/ReportModel.mjs";
-import  {uploadToDropbox} from "../config/storageConfig.mjs";
+import  {uploadToCloudinary } from "../config/storageConfig.mjs";
 
 
 // Function to create a report
@@ -23,7 +23,7 @@ export const createReport = async (req, res) => {
     const mediaBuffer = Buffer.from(files.media.data);
 
     // Upload media to Dropbox and get the shareable link
-    const dropboxLink = await uploadToDropbox(mediaBuffer, files.media.name);
+    const dropboxLink = await uploadToCloudinary (mediaBuffer, files.media.name);
 
     if (dropboxLink) {
       // Add or replace the media URL in the report data
@@ -73,7 +73,7 @@ export const updateReport = async (req, res) => {
     if (files && files.media) {
       const mediaBuffer = Buffer.from(files.media.data);
 
-      const dropboxLink = await uploadToDropbox(mediaBuffer, files.media.name);
+      const dropboxLink = await uploadToCloudinary (mediaBuffer, files.media.name);
 
       if (dropboxLink) {
         body.mediaURL = dropboxLink;

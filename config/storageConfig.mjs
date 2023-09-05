@@ -1,33 +1,35 @@
-import { Dropbox } from 'dropbox';
-import fetch from 'node-fetch';
+import cloudinary from 'cloudinary';
 import dotenv from 'dotenv';
-import fs from 'fs';
 
 dotenv.config();
 
-// Initialize Dropbox SDK
-export const dbx = new Dropbox({
-  accessToken: process.env.DROPBOX_ACCESS_TOKEN,
-  fetch: fetch
+// Cloudinary configuration
+cloudinary.v2.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET
 });
 
-// Use a buffer to upload files to Dropbox
-export const uploadToDropbox = async (buffer, fileName) => {
+// Function to upload media to Cloudinary
+export const uploadToCloudinary = async (mediaBuffer, fileName) => {
   try {
-    const uploadResponse = await dbx.filesUpload({
-      path: `/WhistleBlower-Becode-App/${fileName}`,
-      contents: buffer
+    const result = await cloudinary.v2.uploader.upload_stream({
+      resource_type: 'auto', 
+      public_id: fileName // Use the original file name as the public ID
+    }, (error, result) => {
+      if (error) {
+        console.error('Cloudinary upload error:', error);
+        return null;
+      }
+      // Return the secure URL of the uploaded resource
+      return result.secure_url;
     });
 
-    const linkResponse = await dbx.sharingCreateSharedLinkWithSettings({
-      path: uploadResponse.path_lower
-    });
-
-    return linkResponse.url;
-
+    // Create a readable stream from the buffer and pipe it to Cloudinary
+    const readableStream = new Readable().push(mediaBuffer).push(null);
+    readableStream.pipe(result);
   } catch (error) {
-    console.error(`Dropbox upload failed: ${error}`);
+    console.error('Error uploading to Cloudinary:', error);
     return null;
   }
 };
-
