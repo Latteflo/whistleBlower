@@ -61,7 +61,7 @@ export const generateReportPDF = async (req, res) => {
             <p><span class="label">Involve Others:</span> ${
               report.involve_others ? "Yes" : "No"
             }</p>
-            <p><span class="label">Status:</span> ${reportData.status}</p>
+            <p><span class="label">Status:</span> ${report.status}</p>
             <p><span class="label">Submitted At:</span> ${
               report.submitted_at
             }</p>
