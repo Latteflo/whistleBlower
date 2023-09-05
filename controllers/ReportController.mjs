@@ -19,27 +19,33 @@ export const createReport = async (req, res) => {
     const userId = req.user.id;
     const { body, files } = req; 
 
-    // Convert the uploaded file to a Buffer
-    const mediaBuffer = Buffer.from(files.media.data);
+    // Initialize mediaURL to be empty
+    let mediaURL = '';
 
-    // Upload media to Dropbox and get the shareable link
-    const dropboxLink = await uploadToCloudinary (mediaBuffer, files.media.name);
+    if (files && files.media) {
+      // Convert the uploaded file to a Buffer
+      const mediaBuffer = Buffer.from(files.media.data);
 
-    if (dropboxLink) {
-      // Add or replace the media URL in the report data
-      body.mediaURL = dropboxLink;
+      // Upload media to Cloudinary and get the shareable link
+      const cloudinaryLink = await uploadToCloudinary(mediaBuffer, files.media.name);
 
-      const report = await createReportModel(body, userId);
-      res.status(201).json({ message: "Report created successfully", data: report });
-    } else {
-      res.status(400).json({ message: "Failed to upload media to Dropbox" });
+      if (cloudinaryLink) {
+        mediaURL = cloudinaryLink;
+      } else {
+        return res.status(400).json({ message: "Failed to upload media" });
+      }
     }
+
+    // Add or replace the media URL in the report data
+    body.mediaURL = mediaURL;
+
+    const report = await createReportModel(body, userId);
+    res.status(201).json({ message: "Report created successfully", data: report });
   } catch (error) {
     console.error("Error while creating report: ", error);
     res.status(500).send("Internal Server Error");
   }
 };
-
 
 
 // Function to get a report by id
@@ -123,7 +129,7 @@ export const updateReportStatusById = async (req, res) => {
   try {
     const { id } = req.params;
     const { status } = req.body;
-    const updatedReport = await updateReportStatusModel(id, status);  // Call the model function
+    const updatedReport = await updateReportStatusModel(id, status); 
 
     if (updatedReport) {
       res.json({ success: true, report: updatedReport });
