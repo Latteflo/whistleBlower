@@ -1,19 +1,23 @@
-import puppeteer from 'puppeteer';
+import puppeteer from 'chrome-aws-lambda';
 
-export const generatePDF = async (htmlContent) => {
+export const generatePDF = async (html) => {
+  let browser = null;
   try {
-    const browser = await puppeteer.launch();
+    browser = await puppeteer.launch({
+      args: chrome.args,
+      executablePath: await chrome.executablePath,
+      headless: chrome.headless,
+    });
+
     const page = await browser.newPage();
-  
-    await page.setContent(htmlContent);
-  
+    await page.setContent(html);
     const pdf = await page.pdf({ format: 'A4' });
-  
+
     await browser.close();
-  
     return pdf;
   } catch (error) {
-    console.error("Error in PDF generation:", error);
+    console.error('Error generating PDF:', error);
+    if (browser) await browser.close();
     return null;
   }
 };
