@@ -1,4 +1,4 @@
-import puppeteer from 'chrome-aws-lambda';
+import puppeteer from 'puppeteer';
 
 export const generatePDF = async (html) => {
   let browser = null;
