@@ -1,23 +1,48 @@
-import puppeteer from 'puppeteer';
+import https from 'https';
+import 'dotenv';
 
-export const generatePDF = async (html) => {
-  let browser = null;
-  try {
-    browser = await puppeteer.launch({
-      args: chrome.args,
-      executablePath: await chrome.executablePath,
-      headless: chrome.headless,
+dotenv.config();
+
+export const generatePDFWithAPI = async (reportData) => {
+  return new Promise((resolve, reject) => {
+    const options = {
+      method: 'POST',
+      hostname: 'us1.pdfgeneratorapi.com',
+      port: null,
+      path: '/api/v4/documents/generate',
+      headers: {
+        Authorization: `Bearer ${process.env.PDF_GENERATOR_API_KEY}`,
+        'Content-Type': 'application/json',
+      },
+    };
+
+    const req = https.request(options, (res) => {
+      const chunks = [];
+      res.on('data', (chunk) => {
+        chunks.push(chunk);
+      });
+
+      res.on('end', () => {
+        const body = Buffer.concat(chunks);
+        resolve(body.toString());
+      });
     });
 
-    const page = await browser.newPage();
-    await page.setContent(html);
-    const pdf = await page.pdf({ format: 'A4' });
+    req.on('error', (e) => {
+      reject(e);
+    });
 
-    await browser.close();
-    return pdf;
-  } catch (error) {
-    console.error('Error generating PDF:', error);
-    if (browser) await browser.close();
-    return null;
-  }
+    const payload = {
+      template: {
+        id: '749566',
+        data: reportData,
+      },
+      format: 'pdf',
+      output: 'url',
+      name: 'Generated Report',
+    };
+
+    req.write(JSON.stringify(payload));
+    req.end();
+  });
 };

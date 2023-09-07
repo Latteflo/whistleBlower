@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Report Overview</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .header, .content, .footer {
+            margin: 20px;
+            padding: 20px;
+            border-radius: 8px;
+        }
+        .header, .footer {
+            background-color: #f2f2f2;
+        }
+        .report-title {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+        .label {
+            font-weight: bold;
+        }
+        .media {
+            max-width: 200px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <h1>Report Overview</h1>
+    </div>
+
+    <div class="content">
+        <h2 class="report-title">{{title}}</h2>
+        <p><span class="label">Report ID:</span> {{id}}</p>
+        {% if not is_anonymous %}
+        <p><span class="label">User ID:</span> {{user_id}}</p>
+        {% endif %}
+        <p><span class="label">Category ID:</span> {{category_id}}</p>
+        <p><span class="label">Priority ID:</span> {{priority_id}}</p>
+        <p><span class="label">Description:</span> {{description}}</p>
+        <p><span class="label">Is Anonymous:</span> {{is_anonymous|yesno:"Yes,No"}}</p>
+        <p><span class="label">Involve Others:</span> {{involve_others|yesno:"Yes,No"}}</p>
+        <p><span class="label">Status:</span> {{status}}</p>
+        <p><span class="label">Submitted At:</span> {{submitted_at}}</p>
+        <p><span class="label">Updated At:</span> {{updated_at}}</p>
+        {% if media %}
+        <div><span class="label">Media:</span><img class="media" src="{{media}}" alt="Media related to the report"></div>
+        {% endif %}
+    </div>
+
+    <div class="footer">
+        <p>Generated on {{current_date}}</p>
+    </div>
+
+</body>
+</html>
