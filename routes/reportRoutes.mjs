@@ -14,7 +14,7 @@ import {
   authMiddlewareWithRole,
 } from "../middleware/authMiddleware.mjs"
 import { getReportsByPriorityColor } from "../controllers/PriorityController.mjs"
-import { generateReportPDF } from "../controllers/pdfGeneratorController.mjs"
+import { generateReportPDF } from "../controllers/PdfGeneratorController.mjs"
 const router = express.Router()
 
 // Create a new report
