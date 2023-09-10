@@ -27,6 +27,6 @@ router.get("/status", authMiddlewareWithRole("admin"), getReportsByStatus)
 router.put("/:id", authMiddleware, updateReport)
 router.put("/:id/status", authMiddleware, updateReportStatusById)
 router.delete("/:id", authMiddleware, deleteReport)
-router.post("/:id/pdf", generateReportPDF)
+router.post("/:id/pdf", authMiddlewareWithRole("admin"), generateReportPDF)
 
 export default router
