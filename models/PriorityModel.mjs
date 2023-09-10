@@ -63,3 +63,23 @@ export const getReportsByPriorityIdModel = async (priorityId) => {
     throw new Error("Failed to fetch reports by priority ID")
   }
 }
+
+
+// Function to retrieve priority by ID
+export const getPriorityByIdModel = async (id) => {
+  try {
+    const query = 'SELECT * FROM priority WHERE id = $1';
+    const values = [id];
+    
+    const result = await db.query(query, values);
+    
+    if (result.rows.length > 0) {
+      return result.rows[0];
+    } else {
+      return null;
+    }
+  } catch (error) {
+    console.error('Error fetching priority by ID:', error);
+    return null;
+  }
+};
