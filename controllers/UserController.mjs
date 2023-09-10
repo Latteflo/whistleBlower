@@ -1,23 +1,31 @@
 import bcrypt from "bcrypt"
 import jwt from "jsonwebtoken"
+import Joi from "joi"
 import {
   createUserModel,
   getUserByIdModel,
   getUserByUsernameModel,
   getAllUsersModel,
   getUserByEmailModel,
-  updateUserPasswordModel
+  updateUserPasswordModel,
 } from "../models/UserModel.mjs"
+
+// Define the Joi schema for the request body data
+const schema = Joi.object({
+  username: Joi.string().required(),
+  email: Joi.string().email().required(),
+  password: Joi.string().required(),
+  role: Joi.string().valid("admin", "client"),
+})
 
 // Function to register a user
 export const register = async (req, res) => {
   try {
-    const { username, email, password, role } = req.body
-
-    // Validate role if provided
-    if (role && !["admin", "client"].includes(role)) {
-      return res.status(400).json({ message: "Invalid role" })
+    const { error, value } = schema.validate(req.body)
+    if (error) {
+      return res.status(400).json({ message: error.details[0].message })
     }
+    const { username, email, password, role } = value
 
     // Hash the password
     const hashedPassword = await bcrypt.hash(password, 10)
@@ -39,7 +47,11 @@ export const register = async (req, res) => {
 // Function to register an admin
 export const registerAdmin = async (req, res) => {
   try {
-    const { username, email, password } = req.body
+    const { error, value } = schema.validate(req.body)
+    if (error) {
+      return res.status(400).json({ message: error.details[0].message })
+    }
+    const { username, email, password } = value
 
     // Hash the password
     const hashedPassword = await bcrypt.hash(password, 10)
@@ -59,7 +71,9 @@ export const login = async (req, res) => {
     const { username, password } = req.body
 
     // Find the user by username OR email
-    const user = await getUserByUsernameModel(username) || await getUserByEmailModel(username)    
+    const user =
+      (await getUserByUsernameModel(username)) ||
+      (await getUserByEmailModel(username))
 
     // Check if the user exists
     if (!user) {
@@ -111,33 +125,33 @@ export const getAllUsers = async (req, res) => {
 // Function to update user password
 export const updateUserPassword = async (req, res) => {
   try {
-    const userId = req.user.id;
-    const { oldPassword, newPassword } = req.body;
+    const userId = req.user.id
+    const { oldPassword, newPassword } = req.body
 
     // Fetch the current password hash from the database for this user
-    const user = await getUserByIdModel(userId);
+    const user = await getUserByIdModel(userId)
 
     if (!user) {
-      return res.status(404).json({ message: "User not found" });
+      return res.status(404).json({ message: "User not found" })
     }
 
     // Check if the old password is correct
-    const isMatch = await bcrypt.compare(oldPassword, user.password);
+    const isMatch = await bcrypt.compare(oldPassword, user.password)
 
     if (!isMatch) {
-      return res.status(401).json({ message: "Old password is incorrect" });
+      return res.status(401).json({ message: "Old password is incorrect" })
     }
 
     // Update the password
-    const updateSuccess = await updateUserPasswordModel(userId, newPassword);
+    const updateSuccess = await updateUserPasswordModel(userId, newPassword)
 
     if (updateSuccess) {
-      res.status(200).json({ message: "Password updated successfully" });
+      res.status(200).json({ message: "Password updated successfully" })
     } else {
-      res.status(500).json({ message: "Failed to update password" });
+      res.status(500).json({ message: "Failed to update password" })
     }
   } catch (error) {
-    console.error("Error while updating password:", error);
-    res.status(500).json({ message: "Internal Server Error" });
+    console.error("Error while updating password:", error)
+    res.status(500).json({ message: "Internal Server Error" })
   }
-};
+}
