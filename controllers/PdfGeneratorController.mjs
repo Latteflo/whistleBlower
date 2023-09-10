@@ -18,6 +18,10 @@ export const generateReportPDF = async (req, res) => {
     const priority = await getPriorityByIdModel(report.priority_id);
     const user = report.is_anonymous ? null : await getUserByIdModel(report.user_id);
 
+    if (!req.user) {
+      return res.status(401).json({ message: "User is not authenticated" });
+    }
+    
     // Map database fields to template fields
     const mappedReportData = {
       ReportTitle: report.title,
