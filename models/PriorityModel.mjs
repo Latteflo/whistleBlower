@@ -71,7 +71,7 @@ export const getPriorityByIdModel = async (id) => {
     const query = 'SELECT * FROM priority WHERE id = $1';
     const values = [id];
     
-    const result = await db.query(query, values);
+    const result = await pool.query(query, values);
     
     if (result.rows.length > 0) {
       return result.rows[0];
