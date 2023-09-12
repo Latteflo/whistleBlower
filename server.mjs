@@ -12,10 +12,18 @@ import auditRoutes from "./routes/auditLogRoutes.mjs"
 
 const app = express()
 const PORT = process.env.PORT || 3000
+const cors = require('cors');
+
+app.use(cors({
+  origin: 'http://localhost:3000',  
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE']
+}));
 
 // Middleware
 app.use(express.json())
 app.use(helmet())
+app.use(cors());
 
 // Routes
 app.use("/users", userRoutes)
@@ -25,6 +33,8 @@ app.use("/search", searchRoutes)
 app.use("/priorities", priorityRoutes)
 app.use("/categories", categoryRoutes)
 app.use("/audits", auditRoutes)
+
+
 
 app.get("/", (req, res) => {
   res.send("Hello, world!!!")
