@@ -9,6 +9,7 @@ import {
   getUserByEmailModel,
   updateUserPasswordModel,
   getAllAdminsModel,
+  logoutUserModel
 } from "../models/UserModel.mjs"
 
 // Define the Joi schema for the request body data
@@ -158,12 +159,28 @@ export const updateUserPassword = async (req, res) => {
 }
 
 // Function to get all admins
-
 export const getAllAdmins = async (req, res) => {
   try {
     const admins = await getAllAdminsModel()
     res.json(admins)
   } catch (error) {
     res.status(500).json({ error: error.message })
+  }
+}
+
+
+// Function to logout a user
+export const logout = async (req, res) =>{
+  try{
+    const token = req.cookies.token;
+    const logoutSuccess = await logoutUserModel(token);
+    if(logoutSuccess){
+      res.clearCookie("token").json({ message: "Logged out successfully" })
+    }else{
+      res.status(500).json({ message: "Failed to logout" })
+    }
+  }catch(error){
+    console.error("Error while logging out:", error)
+    res.status(500).json({ message: "Internal Server Error" })
   }
 }

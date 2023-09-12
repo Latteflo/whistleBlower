@@ -89,8 +89,8 @@ export const updateUserPasswordModel = async (userId, newPassword) => {
     return false;
   }
 };
-// Function to get all admins 
 
+// Function to get all admins 
 export const getAllAdminsModel = async () => {
   const query = "SELECT ua.*, ur.role FROM user_auth AS ua JOIN user_role AS ur ON ua.id = ur.auth_id WHERE ur.role = 'admin'";
 
@@ -103,3 +103,19 @@ export const getAllAdminsModel = async () => {
     throw err;
   }
 }
+
+// Function to logout a user
+export const logoutUserModel = async (userId) => {
+  const query = "UPDATE user_auth SET token = NULL WHERE id = $1 RETURNING id";
+  const values = [userId];
+
+  try {
+    const result = await pool.query(query, values);
+
+    return result.rows[0]?.id ? true : false;
+  } catch (err) {
+    console.error('Error in updating user token:', err);
+    return false;
+  }
+};
+
