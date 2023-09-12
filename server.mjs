@@ -11,10 +11,10 @@ import categoryRoutes from "./routes/categoryRoutes.mjs"
 import auditRoutes from "./routes/auditLogRoutes.mjs"
 import cors from 'cors';
 
+const app = express();
+const PORT = process.env.PORT || 3000;
 
-const app = express()
-const PORT = process.env.PORT || 3000
-
+// CORS
 app.use(cors({
   origin: 'http://localhost:3000',  
   credentials: true,
@@ -22,25 +22,22 @@ app.use(cors({
 }));
 
 // Middleware
-app.use(express.json())
-app.use(helmet())
-app.use(cors());
+app.use(express.json());
+app.use(helmet());
 
 // Routes
-app.use("/users", userRoutes)
-app.use("/reports", reportRoutes)
-app.use("/replies", replyRoutes)
-app.use("/search", searchRoutes)
-app.use("/priorities", priorityRoutes)
-app.use("/categories", categoryRoutes)
-app.use("/audits", auditRoutes)
-
-
+app.use("/users", userRoutes);
+app.use("/reports", reportRoutes);
+app.use("/replies", replyRoutes);
+app.use("/search", searchRoutes);
+app.use("/priorities", priorityRoutes);
+app.use("/categories", categoryRoutes);
+app.use("/audits", auditRoutes);
 
 app.get("/", (req, res) => {
-  res.send("Hello, world!!!")
-})
+  res.send("Hello, world!!!");
+});
 
 app.listen(PORT, () => {
-  console.log(`We are aliiivee on port ${PORT}`)
-})
+  console.log(`We are aliiivee on port ${PORT}`);
+});
