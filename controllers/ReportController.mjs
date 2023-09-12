@@ -34,7 +34,7 @@ export const createReport = async (req, res) => {
       if (cloudinaryLink) {
         mediaURL = cloudinaryLink
       } else {
-        return res.status(400).json({ message: "Failed to upload media" })
+        return res.status(400).json({ success: false, message: "Failed to upload media" })
       }
     }
 
@@ -44,7 +44,7 @@ export const createReport = async (req, res) => {
     const report = await createReportModel(body, userId)
     res
       .status(201)
-      .json({ message: "Report created successfully", data: report })
+      .json({success: true,  message: "Report created successfully", data: report })
   } catch (error) {
     console.error("Error while creating report: ", error)
     res.status(500).send("Internal Server Error")
@@ -56,11 +56,11 @@ export const getReportById = async (req, res) => {
   try {
     const report = await getReportByIdModel(req.params.id)
     if (!report) {
-      return res.status(404).json({ message: "Report not found" })
+      return res.status(404).json({success: false,  message: "Report not found" })
     }
     res.status(200).json({ data: report })
   } catch (error) {
-    res.status(400).json({ message: "Error retrieving report", error })
+    res.status(400).json({ success: false, message: "Error retrieving report", error })
   }
 }
 
@@ -70,7 +70,7 @@ export const getReportsByUserId = async (req, res) => {
     const reports = await getReportsByUserIdModel(req.user.id)
     res.status(200).json({ data: reports })
   } catch (error) {
-    res.status(400).json({ message: "Error retrieving reports", error })
+    res.status(400).json({ success: false, message: "Error retrieving reports", error })
   }
 }
 
@@ -90,20 +90,20 @@ export const updateReport = async (req, res) => {
       if (cloudinaryLink) {
         body.mediaURL = cloudinaryLink
       } else {
-        return res.status(400).json({ message: "Failed to upload media" })
+        return res.status(400).json({success: false,  message: "Failed to upload media" })
       }
     }
 
     const report = await updateReportByIdModel(req.params.id, body)
     if (!report) {
-      return res.status(404).json({ message: "Report not found" })
+      return res.status(404).json({success: false,  message: "Report not found" })
     }
     res
       .status(200)
       .json({ message: "Report updated successfully", data: report })
   } catch (error) {
     console.error("Error updating report: ", error)
-    res.status(400).json({ message: "Error updating report", error })
+    res.status(400).json({ success: false, message: "Error updating report", error })
   }
 }
 
@@ -112,11 +112,11 @@ export const deleteReport = async (req, res) => {
   try {
     const report = await deleteReportByIdModel(req.params.id)
     if (!report) {
-      return res.status(404).json({ message: "Report not found" })
+      return res.status(404).json({ success: false, message: "Report not found" })
     }
-    res.status(200).json({ message: "Report deleted successfully" })
+    res.status(200).json({success: true,  message: "Report deleted successfully" })
   } catch (error) {
-    res.status(400).json({ message: "Error deleting report", error })
+    res.status(400).json({ success: false, message: "Error deleting report", error })
   }
 }
 
@@ -127,7 +127,7 @@ export const getAllReports = async (req, res) => {
     res.status(200).json({ data: reports })
   } catch (error) {
     console.error(error)
-    res.status(400).json({ message: "Error retrieving reports", error })
+    res.status(400).json({success: false,  message: "Error retrieving reports", error })
   }
 }
 
@@ -197,11 +197,11 @@ export const updateReportMedia = async (req, res) => {
 export const getReportsByCategoryId = async (req, res) => {
   try {
     const reports = await getReportsByCategoryIdModel(req.params.id)
-    res.status(200).json({ data: reports })
+    res.status(200).json({success: true,  data: reports })
   } catch (error) {
     res
       .status(400)
-      .json({ message: "Error retrieving reports by category", error })
+      .json({success: false,  message: "Error retrieving reports by category", error })
   }
 }
 
@@ -209,10 +209,10 @@ export const getReportsByCategoryId = async (req, res) => {
 export const getReportsByStatus = async (req, res) => {
   try {
     const reports = await getReportsByStatusModel(req.params.status)
-    res.status(200).json({ data: reports })
+    res.status(200).json({ success: true, data: reports })
   } catch (error) {
     res
       .status(400)
-      .json({ message: "Error retrieving reports by status", error })
+      .json({ success: false, message: "Error retrieving reports by status", error })
   }
 }

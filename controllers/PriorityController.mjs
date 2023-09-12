@@ -10,10 +10,10 @@ export const initializePriorities = async (req, res) => {
   try {
     await initializePrioritiesModel()
     console.log("Successfully initialized priorities")
-    res.status(200).json({ message: "Priorities initialized successfully" })
+    res.status(200).json({ success: true, message: "Priorities initialized successfully" })
   } catch (error) {
     console.error("Error initializing priorities:", error)
-    res.status(500).json({ message: "Error initializing priorities", error })
+    res.status(500).json({success: false,  message: "Error initializing priorities", error })
   }
 }
 
@@ -22,10 +22,10 @@ export const getAllPriorities = async (req, res) => {
   try {
     const priorities = await getAllPrioritiesModel()
     console.log("Successfully retrieved all priorities")
-    res.status(200).json({ data: priorities })
+    res.status(200).json({success: true,  data: priorities })
   } catch (error) {
-    console.error("Error retrieving priorities:", error)
-    res.status(500).json({ message: "Error retrieving priorities", error })
+    console.error({success: false, message: "Error retrieving priorities:", error})
+    res.status(500).json({ success: false, message: "Error retrieving priorities", error })
   }
 }
 
@@ -37,15 +37,15 @@ export const getReportsByPriorityId = async (req, res) => {
       console.warn("No reports found for this priority ID:", req.params.id)
       return res
         .status(404)
-        .json({ message: "Reports not found for this priority" })
+        .json({success: false,  message: "Reports not found for this priority" })
     }
     console.log("Successfully retrieved reports by priority ID")
-    res.status(200).json({ data: reports })
+    res.status(200).json({ success: true, data: reports })
   } catch (error) {
     console.error("Error retrieving reports by priority ID:", error)
     res
       .status(500)
-      .json({ message: "Error retrieving reports by priority", error })
+      .json({ success: false, message: "Error retrieving reports by priority", error })
   }
 }
 
@@ -60,14 +60,14 @@ export const getReportsByPriorityColor = async (req, res) => {
       )
       return res
         .status(404)
-        .json({ message: "Reports not found for this priority color" })
+        .json({success: false,  message: "Reports not found for this priority color" })
     }
     console.log("Successfully retrieved reports by priority color")
-    res.status(200).json({ data: reports })
+    res.status(200).json({success: true,  data: reports })
   } catch (error) {
     console.error("Error retrieving reports by priority color:", error)
     res
       .status(500)
-      .json({ message: "Error retrieving reports by priority color", error })
+      .json({success: false,  message: "Error retrieving reports by priority color", error })
   }
 }

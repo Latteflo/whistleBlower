@@ -9,7 +9,7 @@ import {
   getUserByEmailModel,
   updateUserPasswordModel,
   getAllAdminsModel,
-  logoutUserModel
+  logoutUserModel,
 } from "../models/UserModel.mjs"
 
 // Define the Joi schema for the request body data
@@ -29,20 +29,19 @@ export const register = async (req, res) => {
     }
     const { username, email, password, role } = value
 
-    // Hash the password
     const hashedPassword = await bcrypt.hash(password, 10)
 
-    // Create the user with the specified or default role
     const user = await createUserModel(
       username,
       email,
       hashedPassword,
       role || "client"
     )
-
-    res.status(201).json({ message: "User registered successfully", user })
+    res
+      .status(201)
+      .json({ success: true, message: "User registered successfully", user })
   } catch (error) {
-    res.status(500).json({ error: error.message })
+    res.status(500).json({ success: false, error: error.message })
   }
 }
 
@@ -55,15 +54,13 @@ export const registerAdmin = async (req, res) => {
     }
     const { username, email, password } = value
 
-    // Hash the password
     const hashedPassword = await bcrypt.hash(password, 10)
 
-    // Create the user with the admin role
     const user = await createUserModel(username, email, hashedPassword, "admin")
 
-    res.status(201).json({ message: "Admin registered successfully", user })
+    res.status(201).json({success: true,  message: "Admin registered successfully", user })
   } catch (error) {
-    res.status(500).json({ error: error.message })
+    res.status(500).json({success: false,  error: error.message })
   }
 }
 
@@ -99,7 +96,7 @@ export const login = async (req, res) => {
 
     res.json({ token, user })
   } catch (error) {
-    res.status(500).json({ error: error.message })
+    res.status(500).json({ success: false , error: error.message })
   }
 }
 
@@ -110,7 +107,7 @@ export const profile = async (req, res) => {
     const user = await getUserByIdModel(req.user.id)
     res.json(user)
   } catch (error) {
-    res.status(500).json({ error: error.message })
+    res.status(500).json({ success: false , error: error.message })
   }
 }
 
@@ -120,7 +117,7 @@ export const getAllUsers = async (req, res) => {
     const users = await getAllUsersModel()
     res.json(users)
   } catch (error) {
-    res.status(500).json({ error: error.message })
+    res.status(500).json({success: false,  error: error.message })
   }
 }
 
@@ -134,7 +131,7 @@ export const updateUserPassword = async (req, res) => {
     const user = await getUserByIdModel(userId)
 
     if (!user) {
-      return res.status(404).json({ message: "User not found" })
+      return res.status(404).json({success:false, message: "User not found" })
     }
 
     // Check if the old password is correct
@@ -148,13 +145,13 @@ export const updateUserPassword = async (req, res) => {
     const updateSuccess = await updateUserPasswordModel(userId, newPassword)
 
     if (updateSuccess) {
-      res.status(200).json({ message: "Password updated successfully" })
+      res.status(200).json({success: true,  message: "Password updated successfully" })
     } else {
-      res.status(500).json({ message: "Failed to update password" })
+      res.status(500).json({ success: false, message: "Failed to update password" })
     }
   } catch (error) {
     console.error("Error while updating password:", error)
-    res.status(500).json({ message: "Internal Server Error" })
+    res.status(500).json({ success: false, message: "Internal Server Error" })
   }
 }
 
@@ -164,23 +161,22 @@ export const getAllAdmins = async (req, res) => {
     const admins = await getAllAdminsModel()
     res.json(admins)
   } catch (error) {
-    res.status(500).json({ error: error.message })
+    res.status(500).json({ success: false, error: error.message })
   }
 }
 
-
 // Function to logout a user
-export const logout = async (req, res) =>{
-  try{
-    const token = req.cookies.token;
-    const logoutSuccess = await logoutUserModel(token);
-    if(logoutSuccess){
-      res.clearCookie("token").json({ message: "Logged out successfully" })
-    }else{
-      res.status(500).json({ message: "Failed to logout" })
+export const logout = async (req, res) => {
+  try {
+    const token = req.cookies.token
+    const logoutSuccess = await logoutUserModel(token)
+    if (logoutSuccess) {
+      res.clearCookie("token").json({success: true,  message: "Logged out successfully" })
+    } else {
+      res.status(500).json({ success: false, error: "Failed to logout" })
     }
-  }catch(error){
+  } catch (error) {
     console.error("Error while logging out:", error)
-    res.status(500).json({ message: "Internal Server Error" })
+    res.status(500).json({ success: false, message: "Internal Server Error" })
   }
 }
