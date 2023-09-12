@@ -9,10 +9,11 @@ import searchRoutes from "./routes/searchRoutes.mjs"
 import priorityRoutes from "./routes/priorityRoutes.mjs"
 import categoryRoutes from "./routes/categoryRoutes.mjs"
 import auditRoutes from "./routes/auditLogRoutes.mjs"
+import cors from 'cors';
+
 
 const app = express()
 const PORT = process.env.PORT || 3000
-const cors = require('cors');
 
 app.use(cors({
   origin: 'http://localhost:3000',  
