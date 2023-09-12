@@ -89,3 +89,17 @@ export const updateUserPasswordModel = async (userId, newPassword) => {
     return false;
   }
 };
+// Function to get all admins 
+
+export const getAllAdminsModel = async () => {
+  const query = "SELECT ua.*, ur.role FROM user_auth AS ua JOIN user_role AS ur ON ua.id = ur.auth_id WHERE ur.role = 'admin'";
+
+  try {
+    const result = await pool.query(query);
+    return result.rows;
+  }
+  catch (err) {
+    console.error("Error while fetching all admins:", err);
+    throw err;
+  }
+}

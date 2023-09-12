@@ -8,6 +8,7 @@ import {
   getAllUsersModel,
   getUserByEmailModel,
   updateUserPasswordModel,
+  getAllAdminsModel,
 } from "../models/UserModel.mjs"
 
 // Define the Joi schema for the request body data
@@ -153,5 +154,16 @@ export const updateUserPassword = async (req, res) => {
   } catch (error) {
     console.error("Error while updating password:", error)
     res.status(500).json({ message: "Internal Server Error" })
+  }
+}
+
+// Function to get all admins
+
+export const getAllAdmins = async (req, res) => {
+  try {
+    const admins = await getAllAdminsModel()
+    res.json(admins)
+  } catch (error) {
+    res.status(500).json({ error: error.message })
   }
 }

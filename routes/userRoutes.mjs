@@ -6,6 +6,7 @@ import {
   profile,
   getAllUsers,
   updateUserPassword,
+  getAllAdmins
 } from "../controllers/UserController.mjs"
 import {
   authMiddleware,
@@ -24,5 +25,9 @@ router.get("/client/dashboard", authMiddleware, getClientDashboard)
 router.get("/admin/dashboard",authMiddlewareWithRole("admin"),getAdminDashboard)
 router.get("/all", authMiddlewareWithRole("admin"), getAllUsers)
 router.put("/update-password", authMiddleware, updateUserPassword);
+router.get("/admins", authMiddlewareWithRole("admin"), getAllAdmins)
+router.get("/logout", (req, res) => {
+  res.clearCookie("token").json({ message: "Logged out successfully" })
+})
 
 export default router
