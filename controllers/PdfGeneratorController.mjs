@@ -1,5 +1,6 @@
-import { generatePDF } from 'pdfgeneratorapi';
-import { getReportByIdModel } from "../models/ReportModel.mjs"
+import { axios } from 'axios';
+import process from 'process';
+import {getReportByIdModel } from "../models/ReportModel.mjs"
 import {getCategoryByIdModel} from "../models/CategoryModel.mjs"
 import {getPriorityByIdModel} from "../models/PriorityModel.mjs"
 import {getUserByIdModel} from "../models/UserModel.mjs"
@@ -22,7 +23,6 @@ export const generateReportPDF = async (req, res) => {
       return res.status(401).json({success: false,  message: "User is not authenticated" });
     }
     
-    // Map database fields to template fields
     const mappedReportData = {
       ReportTitle: report.title,
       ReportDescription: report.description,
@@ -39,17 +39,24 @@ export const generateReportPDF = async (req, res) => {
       GeneratedByAdminUsername: req.user.username,
     };
 
-    const pdf = await generatePDF(749566, mappedReportData);  
+    const apiEndpoint = `https://us1.pdfgeneratorapi.com/api/v4/templates/749566`;
+    const apiHeaders = {
+      Authorization: `Bearer ${process.env.PDF_API_KEY}`,
+      "X-Auth-Secret": process.env.PDF_API_SECRET,
+    };
 
-    if (pdf) {
+    const pdfResponse = await axios.post(apiEndpoint, mappedReportData, { headers: apiHeaders, responseType: 'arraybuffer' });
+
+    if (pdfResponse.status === 200) {
       res.set({
         "Content-Type": "application/pdf",
-        "Content-Length": pdf.length,
+        "Content-Length": pdfResponse.data.length,
       });
-      res.send(pdf);
+      res.send(pdfResponse.data);
     } else {
       res.status(500).send("PDF generation failed");
     }
+
   } catch (error) {
     console.error("Error in PDF generation:", error);
     res.status(500).send("Internal Server Error");
