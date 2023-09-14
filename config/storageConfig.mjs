@@ -14,21 +14,21 @@ cloudinary.config({
 
 export const uploadToCloudinary = (mediaBuffer, fileName) => {
   return new Promise((resolve, reject) => {
-    const uploadStream = cloudinary.uploader.upload_stream({
-      resource_type: 'auto',
-      public_id: fileName
-    }, (error, result) => {
-      if (error) {
-        console.error('Cloudinary upload error:', error);
-        reject(error);
-      } else {
-        resolve(result.secure_url);
-      }
+      const uploadStream = cloudinary.uploader.upload_stream({
+        resource_type: 'auto',
+        public_id: fileName
+      }, (error, result) => {
+        if (error) {
+          console.error('Cloudinary upload failed:', error.message);
+          reject(error);
+        } else {
+          resolve(result.secure_url);
+        }
+      });
+  
+      const readableStream = new Readable();
+      readableStream.push(mediaBuffer);
+      readableStream.push(null);
+      readableStream.pipe(uploadStream);
     });
-
-    const readableStream = new Readable();
-    readableStream.push(mediaBuffer);
-    readableStream.push(null);
-    readableStream.pipe(uploadStream);
-  });
-};
+  };
