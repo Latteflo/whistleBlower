@@ -1,7 +1,5 @@
 import { pool } from "../config/db.mjs"
 
-
-
 const fetchUserRoleById = async (authId) => {
   const query = "SELECT id FROM user_role WHERE auth_id = $1";
   try {
@@ -13,11 +11,9 @@ const fetchUserRoleById = async (authId) => {
   }
 };
 
-
-// Function to create a reply
 export const createReplyModel = async (reportId, req, text) => {
-  const authId = req.user.id; 
-  const userId = await fetchUserRoleById(authId);
+  const authId = req.user.id;
+  const userId = await fetchUserRoleById(authId); 
 
   if (!userId) {
     console.error("User ID is null");
