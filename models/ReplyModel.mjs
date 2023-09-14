@@ -1,36 +1,39 @@
 import { pool } from "../config/db.mjs"
 
-const fetchUserRoleById = async (authId) => {
-  const query = "SELECT id FROM user_role WHERE auth_id = $1";
-  try {
-    const result = await pool.query(query, [authId]);
-    return result.rows[0]?.id;
-  } catch (err) {
-    console.error("Error in fetching user role ID:", err);
-    throw err;
-  }
-};
-
 export const createReplyModel = async (reportId, req, text) => {
   const authId = req.user.id;
-  const userId = await fetchUserRoleById(authId); 
 
-  if (!userId) {
-    console.error("User ID is null");
-    throw new Error("User ID is null");
-  }
+  // Fetching the user_id directly by joining user_auth and user_role tables
+  const fetchQuery = `
+    SELECT ur.id 
+    FROM user_role AS ur
+    INNER JOIN user_auth AS ua ON ur.auth_id = ua.id
+    WHERE ua.id = $1;
+  `;
 
-  const query = "INSERT INTO replies (report_id, user_id, text, created_at) VALUES ($1, $2, $3, NOW()) RETURNING *";
-  const values = [reportId, userId, text];
-  
   try {
-    const result = await pool.query(query, values);
-    return result.rows[0];
+    const fetchResult = await pool.query(fetchQuery, [authId]);
+    const userId = fetchResult.rows[0]?.id;
+
+    console.log('User ID:', userId);
+
+    if (!userId) {
+      console.error("User ID is null");
+      throw new Error("User ID is null");
+    }
+
+    const insertQuery = "INSERT INTO replies (report_id, user_id, text, created_at) VALUES ($1, $2, $3, NOW()) RETURNING *";
+    const values = [reportId, userId, text];
+
+    const insertResult = await pool.query(insertQuery, values);
+    return insertResult.rows[0];
+
   } catch (err) {
-    console.error("Error in creating reply:", err);
+    console.error("Error:", err);
     throw err;
   }
 };
+
 
 
 // Function to retrieve replies associated with a particular report ID
