@@ -1,4 +1,4 @@
-import { generatePDFWithAPI } from "../config/pdfConfig.mjs"
+import { generatePDF } from 'pdfgeneratorapi';
 import { getReportByIdModel } from "../models/ReportModel.mjs"
 import {getCategoryByIdModel} from "../models/CategoryModel.mjs"
 import {getPriorityByIdModel} from "../models/PriorityModel.mjs"
@@ -39,7 +39,7 @@ export const generateReportPDF = async (req, res) => {
       GeneratedByAdminUsername: req.user.username,
     };
 
-    const pdf = await generatePDFWithAPI(mappedReportData);
+    const pdf = await generatePDF(749566, mappedReportData);  
 
     if (pdf) {
       res.set({

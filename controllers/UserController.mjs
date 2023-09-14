@@ -28,7 +28,11 @@ export const register = async (req, res) => {
       return res.status(400).json({ message: error.details[0].message })
     }
     const { username, email, password, role } = value
-
+    const existingUser = await findUserByUsername(username);
+    if (existingUser) {
+      console.log(`Username '${username}' already exists.`);  
+      return res.status(400).json({success: false, message: 'Username already exists'});
+    }
     const hashedPassword = await bcrypt.hash(password, 10)
 
     const user = await createUserModel(
@@ -54,6 +58,11 @@ export const registerAdmin = async (req, res) => {
     }
     const { username, email, password } = value
 
+    const existingUser = await findUserByUsername(username);
+    if (existingUser) {
+      console.log(`Username '${username}' already exists.`); 
+      return res.status(400).json({success: false, message: 'Username already exists'});
+    }
     const hashedPassword = await bcrypt.hash(password, 10)
 
     const user = await createUserModel(username, email, hashedPassword, "admin")
@@ -69,7 +78,7 @@ export const login = async (req, res) => {
   try {
     const { username, password } = req.body
 
-    // Find the user by username OR email
+    // Find the user by username or email
     const user =
       (await getUserByUsernameModel(username)) ||
       (await getUserByEmailModel(username))
