@@ -1,9 +1,12 @@
-import { axios } from 'axios';
-import process from 'process';
+import axios from 'axios';
 import {getReportByIdModel } from "../models/ReportModel.mjs"
 import {getCategoryByIdModel} from "../models/CategoryModel.mjs"
 import {getPriorityByIdModel} from "../models/PriorityModel.mjs"
 import {getUserByIdModel} from "../models/UserModel.mjs"
+import dotenv from 'dotenv'
+
+dotenv.config()
+
 
 export const generateReportPDF = async (req, res) => {
   try {
