@@ -1,29 +1,16 @@
 import { pool } from "../config/db.mjs"
 
-// Function to fetch user_role.id based on auth_id
-const fetchUserRoleById = async (authId) => {
-  const query = "SELECT id FROM user_role WHERE auth_id = $1";
-  try {
-    const result = await pool.query(query, [authId]);
-    return result.rows[0]?.id;  
-  } catch (err) {
-    console.error("Error in fetching user role ID:", err);
-    throw err;
-  }
-};
 
 // Function to create a reply
-export const createReplyModel = async (reportId, authId, text) => {
-  // Fetch the user_role.id based on auth_id
-  const userId = await fetchUserRoleById(authId);
-
+export const createReplyModel = async (reportId, req, text) => {
+  const userId = req.user.id; 
+  
   if (!userId) {
     console.error("User ID is null");
     throw new Error("User ID is null");
   }
 
-  const query =
-    "INSERT INTO replies (report_id, user_id, text, created_at) VALUES ($1, $2, $3, NOW()) RETURNING *";
+  const query = "INSERT INTO replies (report_id, user_id, text, created_at) VALUES ($1, $2, $3, NOW()) RETURNING *";
   const values = [reportId, userId, text];
   
   try {
@@ -34,6 +21,7 @@ export const createReplyModel = async (reportId, authId, text) => {
     throw err;
   }
 };
+
 
 // Function to retrieve replies associated with a particular report ID
 export const getRepliesByReportIdModel = async (reportId) => {
