@@ -33,7 +33,7 @@ export const generateReportPDF = async (req, res) => {
       InvolveOthers: report.involve_others ? "Yes" : "No",
       ReportStatus: report.status,
       SubmittedAt: new Date(report.submitted_at).toLocaleString(),
-      SubmittedBy: report.is_anonymous ? "Anonymous" : `${user.first_name} ${user.last_name}`,
+      SubmittedBy: report.is_anonymous ? "Anonymous" : `${user.username}`,
       ReportCategory: category ? category.name : "N/A",
       ReportPriority: priority ? priority.name : "N/A",
       ReportPriorityColor: priority ? priority.color_code : "N/A",
