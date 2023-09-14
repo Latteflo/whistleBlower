@@ -14,12 +14,12 @@ import cors from 'cors';
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// CORS
 app.use(cors({
-  origin: 'https://whistle-blower-frontend.vercel.app/',"localhost:3000",
+  origin: ['https://whistle-blower-frontend.vercel.app', 'http://localhost:3000'],
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE']
 }));
+
 
 // Middleware
 app.use(express.json());
