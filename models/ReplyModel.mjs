@@ -3,7 +3,7 @@ import { pool } from "../config/db.mjs"
 // Function to create a reply
 export const createReplyModel = async (reportId, userId, text) => {
   const query =
-    "INSERT INTO replies (report_id, user_id, text, created_at) VALUES ($1, $2, $3, NOW()) RETURNING *"
+    "INSERT INTO replies (report_id, auth_id, text, created_at) VALUES ($1, $2, $3, NOW()) RETURNING *"
   const values = [reportId, userId, text]
   try {
     const result = await pool.query(query, values)
