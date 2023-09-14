@@ -1,18 +1,23 @@
 import { pool } from "../config/db.mjs"
 
-// Function to create a reply
 export const createReplyModel = async (reportId, userId, text) => {
-  const query =
-    "INSERT INTO replies (report_id, auth_id, text, created_at) VALUES ($1, $2, $3, NOW()) RETURNING *"
-  const values = [reportId, userId, text]
-  try {
-    const result = await pool.query(query, values)
-    return result.rows[0]
-  } catch (err) {
-    console.error("Error in creating reply:", err)
-    throw err
+  if (!userId) {
+    console.error("User ID is null");
+    throw new Error("User ID is null");
   }
-}
+
+  const query =
+    "INSERT INTO replies (report_id, user_id, text, created_at) VALUES ($1, $2, $3, NOW()) RETURNING *";
+  const values = [reportId, userId, text];
+  
+  try {
+    const result = await pool.query(query, values);
+    return result.rows[0];
+  } catch (err) {
+    console.error("Error in creating reply:", err);
+    throw err;
+  }
+};
 
 // Function to retrieve replies associated with a particular report ID
 export const getRepliesByReportIdModel = async (reportId) => {
