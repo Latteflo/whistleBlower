@@ -59,7 +59,7 @@ export const registerAdmin = async (req, res) => {
     }
     const { username, email, password } = value
 
-    const existingUser = await findUserByUsername(username);
+    const existingUser = await getUserByUsernameModel(username);   
     if (existingUser) {
       console.log(`Username '${username}' already exists.`); 
       return res.status(400).json({success: false, message: 'Username already exists'});
