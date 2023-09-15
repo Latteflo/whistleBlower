@@ -1,11 +1,16 @@
 import { pool } from "../config/db.mjs"
 
+// Function to create a reply
 export const createReplyModel = async (reportId, req, text) => {
+  console.log('Inside createReplyModel. req.user:', req.user);  
+  if(!req.user) {
+    console.error('req.user is undefined');
+    throw new Error('req.user is undefined');
+  }
   const authId = req.user.id;
 
-  // Fetching the user_id directly by joining user_auth and user_role tables
   const fetchQuery = `
-    SELECT ur.id 
+    SELECT ur.auth_id 
     FROM user_role AS ur
     INNER JOIN user_auth AS ua ON ur.auth_id = ua.id
     WHERE ua.id = $1;
@@ -13,17 +18,15 @@ export const createReplyModel = async (reportId, req, text) => {
 
   try {
     const fetchResult = await pool.query(fetchQuery, [authId]);
-    const userId = fetchResult.rows[0]?.id;
+    const authIdFromDB = fetchResult.rows[0]?.auth_id;
 
-    console.log('User ID:', userId);
-
-    if (!userId) {
-      console.error("User ID is null");
-      throw new Error("User ID is null");
+    if (!authIdFromDB) {
+      console.error("User ID is not present in user_role table");
+      throw new Error("User ID is not present in user_role table");
     }
 
     const insertQuery = "INSERT INTO replies (report_id, user_id, text, created_at) VALUES ($1, $2, $3, NOW()) RETURNING *";
-    const values = [reportId, userId, text];
+    const values = [reportId, authIdFromDB, text];
 
     const insertResult = await pool.query(insertQuery, values);
     return insertResult.rows[0];
@@ -33,7 +36,6 @@ export const createReplyModel = async (reportId, req, text) => {
     throw err;
   }
 };
-
 
 
 // Function to retrieve replies associated with a particular report ID
