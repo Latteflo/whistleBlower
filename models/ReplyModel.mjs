@@ -2,31 +2,31 @@ import { pool } from "../config/db.mjs"
 
 // Function to create a reply
 export const createReplyModel = async (reportId, req, text) => {
-  console.log('Inside createReplyModel. req.user:', req.user);  
+  
   if(!req.user) {
-    console.error('req.user is undefined');
     throw new Error('req.user is undefined');
   }
+
+  // This is the ID from user_auth, which is used for authentication
   const authId = req.user.id;
 
   const fetchQuery = `
-    SELECT ur.auth_id 
+    SELECT ur.id 
     FROM user_role AS ur
-    INNER JOIN user_auth AS ua ON ur.auth_id = ua.id
-    WHERE ua.id = $1;
+    WHERE ur.auth_id = $1;
   `;
 
   try {
     const fetchResult = await pool.query(fetchQuery, [authId]);
-    const authIdFromDB = fetchResult.rows[0]?.auth_id;
+    const userIdFromUserRole = fetchResult.rows[0]?.id;
 
-    if (!authIdFromDB) {
+    if (!userIdFromUserRole) {
       console.error("User ID is not present in user_role table");
       throw new Error("User ID is not present in user_role table");
     }
 
     const insertQuery = "INSERT INTO replies (report_id, user_id, text, created_at) VALUES ($1, $2, $3, NOW()) RETURNING *";
-    const values = [reportId, authIdFromDB, text];
+    const values = [reportId, userIdFromUserRole, text];
 
     const insertResult = await pool.query(insertQuery, values);
     return insertResult.rows[0];

@@ -5,26 +5,24 @@ import {
   deleteReplyModel,
 } from '../models/ReplyModel.mjs';
 
+
 // Function to create a reply
 export const createReply = async (req, res) => {
   try {
-    console.log("Received request body in createReply:", req.body);  
     const { report_id: reportId, text } = req.body;
-    const userId = req.user._id; 
+    const userId = req.user.id;
     
     if (!reportId || !userId || !text) {
       return res.status(400).json({ success: false, message: 'Missing required fields' });
     }
     
-    const reply = await createReplyModel(reportId, userId, text);
+    const reply = await createReplyModel(reportId, req, text);
     res.status(201).json({ success: true, message: 'Reply created successfully', data: reply });
   } catch (error) {
-    console.error("Error in createReply:", error);  
+    console.error("Error in createReply:", error);
     res.status(500).json({ success: false, message: 'Error creating reply', error });
   }
 };
-
-
 
 // Function to get replies by report ID
 export const getReplyById = async (req, res) => {
