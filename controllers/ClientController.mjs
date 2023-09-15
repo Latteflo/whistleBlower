@@ -10,7 +10,6 @@ export const getClientDashboard = async (req, res) => {
     // Fetching the client's reports and categories
     const reports = await getReportsByUserIdModel(userId)
     const categories = await getAllCategoriesModel()
-    // Group reports by status and priority for summary
     const reportsByStatus = reports.reduce((acc, report) => {
       acc[report.status] = (acc[report.status] || 0) + 1
       return acc
