@@ -12,6 +12,7 @@ import {
   logoutUserModel,
 } from "../models/UserModel.mjs"
 
+
 // Define the Joi schema for the request body data
 const schema = Joi.object({
   username: Joi.string().required(),
@@ -28,8 +29,8 @@ export const register = async (req, res) => {
       return res.status(400).json({ message: error.details[0].message })
     }
     const { username, email, password, role } = value
-    const existingUser = await findUserByUsername(username);
-    if (existingUser) {
+    const existingUser = await getUserByUsernameModel(username);   
+      if (existingUser) {
       console.log(`Username '${username}' already exists.`);  
       return res.status(400).json({success: false, message: 'Username already exists'});
     }
