@@ -68,15 +68,22 @@ export const getAllReportsModel = async () => {
 
 // Function to retrieve a report by ID
 export const getReportByIdModel = async (reportId) => {
-  const query = "SELECT * FROM reports WHERE id = $1"
+  const query = `
+    SELECT r.*, c.category_name
+    FROM reports AS r
+    JOIN categories AS c ON r.category_id = c.id
+    WHERE r.report_id = $1;
+  `;
+
   try {
-    const result = await pool.query(query, [reportId])
-    return result.rows[0]
+    const result = await pool.query(query, [reportId]);
+    return result.rows[0];
   } catch (err) {
-    console.error("Error in fetching reports:", err)
-    return []
+    console.error("Error in fetching report by ID:", err);
+    throw err;
   }
-}
+};
+
 
 // Function to update a report
 export const updateReportByIdModel = async (reportId, title, description, status) => {
