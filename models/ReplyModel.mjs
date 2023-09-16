@@ -40,15 +40,34 @@ export const createReplyModel = async (reportId, req, text) => {
 
 // Function to retrieve replies associated with a particular report ID
 export const getRepliesByReportIdModel = async (reportId) => {
-  const query = "SELECT * FROM replies WHERE report_id = $1"
+  const query = `
+    SELECT 
+      replies.id, 
+      replies.report_id, 
+      replies.user_id, 
+      replies.text, 
+      replies.created_at, 
+      user_auth.username,
+      user_role.role
+    FROM 
+      replies
+    JOIN 
+      user_role ON replies.user_id = user_role.id
+    JOIN
+      user_auth ON user_role.auth_id = user_auth.id
+    WHERE 
+      replies.report_id = $1;
+  `;
+
   try {
-    const result = await pool.query(query, [reportId])
-    return result.rows
+    const result = await pool.query(query, [reportId]);
+    return result.rows;
   } catch (err) {
-    console.error("Error in fetching replies by report ID:", err)
-    throw err
+    console.error("Error in fetching replies by report ID:", err);
+    throw err;
   }
 }
+
 
 // Function to update the text of a reply
 export const updateReplyModel = async (replyId, text) => {
